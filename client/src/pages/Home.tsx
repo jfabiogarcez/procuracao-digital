@@ -216,9 +216,9 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <img src="/logo-jfg.png" alt="JFG Advocacia" className="w-32 h-32 mx-auto mb-4" />
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">JFG Advocacia</h1>
-          <p className="text-lg text-gray-600">Sistema de Procuracao Digital</p>
+          <img src="/logo-jfg.png" alt="Procuracao e Contrato" className="w-32 h-32 mx-auto mb-4" />
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Procuracao e Contrato</h1>
+          <p className="text-lg text-gray-600">Sistema Digital</p>
         </div>
 
         <Card className="shadow-xl">
