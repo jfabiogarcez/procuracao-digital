@@ -39,6 +39,17 @@ export const procuracoes = mysqlTable("procuracoes", {
   // Assinatura e autenticação
   assinatura: text("assinatura").notNull(), // Base64 da assinatura
   fotoAutenticacao: text("fotoAutenticacao"), // Base64 da foto
+  // Testemunhas
+  testemunha1Nome: varchar("testemunha1Nome", { length: 255 }),
+  testemunha1Cpf: varchar("testemunha1Cpf", { length: 14 }),
+  testemunha1Rg: varchar("testemunha1Rg", { length: 50 }),
+  testemunha2Nome: varchar("testemunha2Nome", { length: 255 }),
+  testemunha2Cpf: varchar("testemunha2Cpf", { length: 14 }),
+  testemunha2Rg: varchar("testemunha2Rg", { length: 50 }),
+  // Metadados de segurança
+  ipAddress: varchar("ipAddress", { length: 45 }), // IPv4 ou IPv6
+  userAgent: text("userAgent"), // Navegador usado
+  geolocalizacao: varchar("geolocalizacao", { length: 255 }), // Coordenadas GPS
   // Metadados
   dataEmissao: timestamp("dataEmissao").defaultNow().notNull(),
   qrCode: text("qrCode"), // Dados do QR Code

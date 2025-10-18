@@ -207,7 +207,61 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
   
   yPosition -= 15;
   addText(procuracao.nomeCompleto.toUpperCase(), 11, false, "center");
+  yPosition -= 30;
+
+  // Testemunhas (se fornecidas)
+  if (procuracao.testemunha1Nome || procuracao.testemunha2Nome) {
+    yPosition -= 10;
+    addText("TESTEMUNHAS:", 10, true);
+    yPosition -= 5;
+    
+    if (procuracao.testemunha1Nome) {
+      // Linha para assinatura da testemunha 1
+      const testLineWidth = 150;
+      const testLine1X = margin;
+      page.drawLine({
+        start: { x: testLine1X, y: yPosition },
+        end: { x: testLine1X + testLineWidth, y: yPosition },
+        thickness: 1,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 12;
+      addText(procuracao.testemunha1Nome, 9, false);
+      if (procuracao.testemunha1Cpf) {
+        addText("CPF: " + procuracao.testemunha1Cpf, 8, false);
+      }
+      if (procuracao.testemunha1Rg) {
+        addText("RG: " + procuracao.testemunha1Rg, 8, false);
+      }
+      yPosition -= 10;
+    }
+    
+    if (procuracao.testemunha2Nome) {
+      // Linha para assinatura da testemunha 2
+      const testLineWidth = 150;
+      const testLine2X = margin;
+      page.drawLine({
+        start: { x: testLine2X, y: yPosition },
+        end: { x: testLine2X + testLineWidth, y: yPosition },
+        thickness: 1,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 12;
+      addText(procuracao.testemunha2Nome, 9, false);
+      if (procuracao.testemunha2Cpf) {
+        addText("CPF: " + procuracao.testemunha2Cpf, 8, false);
+      }
+      if (procuracao.testemunha2Rg) {
+        addText("RG: " + procuracao.testemunha2Rg, 8, false);
+      }
+      yPosition -= 10;
+    }
+  }
+
+  // Aviso legal
   yPosition -= 20;
+  addParagraph("AVISO LEGAL: Esta procuracao particular requer reconhecimento de firma em cartorio para plena validade juridica. A assinatura digital possui validade nos termos da Lei 14.063/2020, mas recomenda-se o reconhecimento de firma para eliminar questionamentos sobre autenticidade.", 7, false);
+  yPosition -= 10;
 
   // Rodapé
   yPosition = 50;

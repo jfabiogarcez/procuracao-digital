@@ -31,6 +31,13 @@ export default function Home() {
     cidade: "",
     estado: "",
     email: "",
+    // Testemunhas
+    testemunha1Nome: "",
+    testemunha1Cpf: "",
+    testemunha1Rg: "",
+    testemunha2Nome: "",
+    testemunha2Cpf: "",
+    testemunha2Rg: "",
   });
 
   const signatureRef = useRef<SignatureCanvas>(null);
@@ -139,6 +146,31 @@ export default function Home() {
     }
   };
 
+  const getClientIP = async () => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+    } catch {
+      return null;
+    }
+  };
+
+  const getGeolocation = (): Promise<string | null> => {
+    return new Promise((resolve) => {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve(`${position.coords.latitude},${position.coords.longitude}`);
+          },
+          () => resolve(null)
+        );
+      } else {
+        resolve(null);
+      }
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -147,12 +179,26 @@ export default function Home() {
       return;
     }
 
+    // Validacao: Foto obrigatoria
+    if (!photoData) {
+      toast.error("A foto de autenticacao e obrigatoria! Tire uma foto segurando seu documento.");
+      return;
+    }
+
     const assinatura = signatureRef.current.toDataURL();
+
+    // Capturar metadados de seguranca
+    const ipAddress = await getClientIP();
+    const userAgent = navigator.userAgent;
+    const geolocalizacao = await getGeolocation();
 
     createMutation.mutate({
       ...formData,
       assinatura,
-      fotoAutenticacao: photoData || undefined,
+      fotoAutenticacao: photoData,
+      ipAddress: ipAddress || undefined,
+      userAgent,
+      geolocalizacao: geolocalizacao || undefined,
     });
   };
 
@@ -392,7 +438,10 @@ export default function Home() {
 
               {/* Foto de Autenticacao */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Foto de Autenticacao</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Foto de Autenticacao *</h3>
+                <p className="text-sm text-red-600">
+                  * Campo obrigatorio - Tire uma foto segurando seu documento de identidade para autenticacao
+                </p>
                 <div className="flex flex-col items-center gap-4">
                   {!photoData && !showCamera && (
                     <Button type="button" onClick={startCamera} variant="outline">
@@ -417,6 +466,94 @@ export default function Home() {
                       </Button>
                     </div>
                   )}
+                </div>
+              </div>
+
+              {/* Testemunhas */}
+              <div className="space-y-4 border-t pt-6">
+                <h3 className="text-lg font-semibold text-gray-900">Testemunhas (Opcional, mas Recomendado)</h3>
+                <p className="text-sm text-gray-600">
+                  A inclusao de testemunhas aumenta a seguranca juridica do documento
+                </p>
+                
+                {/* Testemunha 1 */}
+                <div className="border-t pt-4">
+                  <h4 className="font-medium mb-3">Testemunha 1</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="testemunha1Nome">Nome Completo</Label>
+                      <Input
+                        id="testemunha1Nome"
+                        value={formData.testemunha1Nome}
+                        onChange={(e) => handleInputChange("testemunha1Nome", e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="testemunha1Cpf">CPF</Label>
+                      <Input
+                        id="testemunha1Cpf"
+                        placeholder="Somente numeros (11 digitos)"
+                        maxLength={11}
+                        value={formData.testemunha1Cpf}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+                          handleInputChange("testemunha1Cpf", value);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="testemunha1Rg">RG</Label>
+                      <Input
+                        id="testemunha1Rg"
+                        placeholder="Somente numeros"
+                        value={formData.testemunha1Rg}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+                          handleInputChange("testemunha1Rg", value);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Testemunha 2 */}
+                <div className="border-t pt-4">
+                  <h4 className="font-medium mb-3">Testemunha 2</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="testemunha2Nome">Nome Completo</Label>
+                      <Input
+                        id="testemunha2Nome"
+                        value={formData.testemunha2Nome}
+                        onChange={(e) => handleInputChange("testemunha2Nome", e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="testemunha2Cpf">CPF</Label>
+                      <Input
+                        id="testemunha2Cpf"
+                        placeholder="Somente numeros (11 digitos)"
+                        maxLength={11}
+                        value={formData.testemunha2Cpf}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+                          handleInputChange("testemunha2Cpf", value);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="testemunha2Rg">RG</Label>
+                      <Input
+                        id="testemunha2Rg"
+                        placeholder="Somente numeros"
+                        value={formData.testemunha2Rg}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+                          handleInputChange("testemunha2Rg", value);
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -460,6 +597,20 @@ export default function Home() {
                 <Button type="button" onClick={clearSignature} variant="outline" size="sm">
                   Limpar Assinatura
                 </Button>
+              </div>
+
+              {/* Aviso Legal */}
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                <h4 className="font-semibold text-yellow-800 mb-2">
+                  ⚠️ Importante - Validade Juridica
+                </h4>
+                <ul className="text-sm text-yellow-700 space-y-1">
+                  <li>• Esta procuracao e valida nos termos da Lei 14.063/2020</li>
+                  <li>• Para plena validade, recomenda-se reconhecimento de firma em cartorio</li>
+                  <li>• A inclusao de testemunhas aumenta a seguranca juridica</li>
+                  <li>• A foto com documento e obrigatoria para autenticacao</li>
+                  <li>• Seus dados de localizacao e IP serao registrados para seguranca</li>
+                </ul>
               </div>
 
               {/* Botao de Envio */}

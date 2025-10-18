@@ -38,6 +38,17 @@ export const appRouter = router({
           email: z.string().email(),
           assinatura: z.string(),
           fotoAutenticacao: z.string().optional(),
+          // Testemunhas
+          testemunha1Nome: z.string().optional(),
+          testemunha1Cpf: z.string().optional(),
+          testemunha1Rg: z.string().optional(),
+          testemunha2Nome: z.string().optional(),
+          testemunha2Cpf: z.string().optional(),
+          testemunha2Rg: z.string().optional(),
+          // Metadados de seguranca
+          ipAddress: z.string().optional(),
+          userAgent: z.string().optional(),
+          geolocalizacao: z.string().optional(),
         })
       )
       .mutation(async ({ input }) => {
