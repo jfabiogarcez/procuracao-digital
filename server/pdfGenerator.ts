@@ -192,10 +192,9 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
     }
   }
 
-  // Nome do outorgado abaixo da assinatura
+  // Nome do outorgante abaixo da assinatura
   yPosition -= 5;
-  addText("DR. JOSE FABIO GARCEZ", 10, true, "center");
-  addText("OAB/SP 504.270", 9, false, "center");
+  addText(procuracao.nomeCompleto.toUpperCase(), 10, true, "center");
   yPosition -= 20;
 
   // Rodapé
