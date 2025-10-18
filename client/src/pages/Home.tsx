@@ -597,6 +597,20 @@ export default function Home() {
                 <Button type="button" onClick={clearSignature} variant="outline" size="sm">
                   Limpar Assinatura
                 </Button>
+                
+                {/* Nome Completo apos assinatura */}
+                <div className="border-t pt-4 mt-4">
+                  <Label htmlFor="nomeAssinatura">Nome Completo *</Label>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Repita seu nome completo para confirmar a assinatura
+                  </p>
+                  <Input
+                    id="nomeAssinatura"
+                    value={formData.nomeCompleto}
+                    disabled
+                    className="bg-gray-50 font-semibold"
+                  />
+                </div>
               </div>
 
               {/* Aviso Legal */}
