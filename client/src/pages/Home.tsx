@@ -596,7 +596,7 @@ export default function Home() {
                   <SignatureCanvas
                     ref={signatureRef}
                     canvasProps={{
-                      className: "w-full h-48 bg-white",
+                      className: "w-full h-32 bg-white",
                     }}
                   />
                 </div>
