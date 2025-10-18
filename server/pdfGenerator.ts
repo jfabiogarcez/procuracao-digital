@@ -192,9 +192,21 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
     }
   }
 
-  // Nome do outorgante abaixo da assinatura
-  yPosition -= 5;
-  addText(procuracao.nomeCompleto.toUpperCase(), 10, true, "center");
+  // Linha para assinatura manuscrita e nome
+  yPosition -= 10;
+  
+  // Linha horizontal para assinatura
+  const lineWidth = 200;
+  const lineX = (width - lineWidth) / 2;
+  page.drawLine({
+    start: { x: lineX, y: yPosition },
+    end: { x: lineX + lineWidth, y: yPosition },
+    thickness: 1,
+    color: rgb(0, 0, 0),
+  });
+  
+  yPosition -= 15;
+  addText("Nome Completo: " + procuracao.nomeCompleto.toUpperCase(), 9, false, "center");
   yPosition -= 20;
 
   // Rodapé
