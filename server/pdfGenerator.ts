@@ -150,44 +150,27 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
       });
   
   addText(`Sao Paulo, ${dataFormatada}.`, 10);
-  yPosition -= 20;
+  yPosition -= 30;
 
-  // QR Code e Foto
-  if (procuracao.qrCode) {
-    try {
-      const qrBuffer = Buffer.from(procuracao.qrCode.split(",")[1], "base64");
-      const qrImage = await pdfDoc.embedPng(qrBuffer);
-      const qrDims = qrImage.scale(0.3);
-      
-      page.drawImage(qrImage, {
-        x: margin,
-        y: yPosition - qrDims.height,
-        width: qrDims.width,
-        height: qrDims.height,
-      });
-    } catch (error) {
-      console.log("Erro ao adicionar QR Code");
-    }
-  }
-
+  // Foto de Autenticacao (se houver)
   if (procuracao.fotoAutenticacao) {
     try {
       const fotoBuffer = Buffer.from(procuracao.fotoAutenticacao.split(",")[1], "base64");
       const fotoImage = await pdfDoc.embedPng(fotoBuffer);
-      const fotoDims = fotoImage.scale(0.15);
+      const fotoDims = fotoImage.scale(0.2);
       
       page.drawImage(fotoImage, {
-        x: margin + 120,
+        x: margin,
         y: yPosition - fotoDims.height,
         width: fotoDims.width,
         height: fotoDims.height,
       });
+      
+      yPosition -= fotoDims.height + 20;
     } catch (error) {
       console.log("Erro ao adicionar foto");
     }
   }
-
-  yPosition -= 120;
 
   // Assinatura
   if (procuracao.assinatura) {
@@ -203,14 +186,15 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
         height: assinaturaDims.height,
       });
       
-      yPosition -= assinaturaDims.height + 10;
+      yPosition -= assinaturaDims.height + 5;
     } catch (error) {
       console.log("Erro ao adicionar assinatura");
     }
   }
 
-  // Nome e CPF
+  // Nome, RG e CPF abaixo da assinatura
   addText(procuracao.nomeCompleto.toUpperCase(), 10, true, "center");
+  addText(`RG: ${procuracao.rg}`, 10, false, "center");
   addText(`CPF: ${procuracao.cpf}`, 10, false, "center");
   yPosition -= 20;
 
