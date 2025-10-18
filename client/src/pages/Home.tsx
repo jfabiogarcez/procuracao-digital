@@ -3,6 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { trpc } from "@/lib/trpc";
 import { useRef, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
@@ -30,6 +37,8 @@ export default function Home() {
   const [photoData, setPhotoData] = useState<string>("");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [showCamera, setShowCamera] = useState(false);
+  const [showWhatsAppDialog, setShowWhatsAppDialog] = useState(false);
+  const [whatsappLink, setWhatsappLink] = useState("");
 
   const generateDocMutation = trpc.procuracao.generateDocument.useMutation({
     onSuccess: (data) => {
@@ -49,11 +58,10 @@ export default function Home() {
       
       toast.success("Documento PDF gerado com sucesso!");
       
-      // Abrir WhatsApp
+      // Mostrar dialog do WhatsApp
       if (data.whatsappLink) {
-        setTimeout(() => {
-          window.open(data.whatsappLink, "_blank");
-        }, 500);
+        setWhatsappLink(data.whatsappLink);
+        setShowWhatsAppDialog(true);
       }
     },
     onError: (error) => {
@@ -476,6 +484,37 @@ export default function Home() {
           <p>E-mail: jose.fabio.garcez@gmail.com</p>
         </div>
       </div>
+
+      {/* Dialog do WhatsApp */}
+      <Dialog open={showWhatsAppDialog} onOpenChange={setShowWhatsAppDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Documento Gerado com Sucesso!</DialogTitle>
+            <DialogDescription>
+              Seu documento PDF foi gerado e baixado. Clique no botao abaixo para enviar via WhatsApp.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 mt-4">
+            <Button
+              onClick={() => {
+                window.open(whatsappLink, "_blank");
+                setShowWhatsAppDialog(false);
+              }}
+              className="w-full"
+              size="lg"
+            >
+              Enviar via WhatsApp
+            </Button>
+            <Button
+              onClick={() => setShowWhatsAppDialog(false)}
+              variant="outline"
+              className="w-full"
+            >
+              Fechar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
