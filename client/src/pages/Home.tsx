@@ -185,13 +185,34 @@ export default function Home() {
                   </div>
 
                   <div>
-                    <Label htmlFor="profissao">Profissão *</Label>
-                    <Input
-                      id="profissao"
+                    <Label htmlFor="profissao">Profiss\u00e3o *</Label>
+                    <Select
                       value={formData.profissao}
-                      onChange={(e) => handleInputChange("profissao", e.target.value)}
+                      onValueChange={(value) => handleInputChange("profissao", value)}
                       required
-                    />
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Advogado(a)">Advogado(a)</SelectItem>
+                        <SelectItem value="M\u00e9dico(a)">M\u00e9dico(a)</SelectItem>
+                        <SelectItem value="Engenheiro(a)">Engenheiro(a)</SelectItem>
+                        <SelectItem value="Professor(a)">Professor(a)</SelectItem>
+                        <SelectItem value="Contador(a)">Contador(a)</SelectItem>
+                        <SelectItem value="Arquiteto(a)">Arquiteto(a)</SelectItem>
+                        <SelectItem value="Enfermeiro(a)">Enfermeiro(a)</SelectItem>
+                        <SelectItem value="Administrador(a)">Administrador(a)</SelectItem>
+                        <SelectItem value="Empres\u00e1rio(a)">Empres\u00e1rio(a)</SelectItem>
+                        <SelectItem value="Comerciante">Comerciante</SelectItem>
+                        <SelectItem value="Funcion\u00e1rio(a) P\u00fablico(a)">Funcion\u00e1rio(a) P\u00fablico(a)</SelectItem>
+                        <SelectItem value="Aposentado(a)">Aposentado(a)</SelectItem>
+                        <SelectItem value="Aut\u00f4nomo(a)">Aut\u00f4nomo(a)</SelectItem>
+                        <SelectItem value="Estudante">Estudante</SelectItem>
+                        <SelectItem value="Do lar">Do lar</SelectItem>
+                        <SelectItem value="Outro">Outro</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
@@ -199,7 +220,11 @@ export default function Home() {
                     <Input
                       id="rg"
                       value={formData.rg}
-                      onChange={(e) => handleInputChange("rg", e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        handleInputChange("rg", value);
+                      }}
+                      placeholder="Somente n\u00fameros"
                       required
                     />
                   </div>
@@ -209,8 +234,14 @@ export default function Home() {
                     <Input
                       id="cpf"
                       value={formData.cpf}
-                      onChange={(e) => handleInputChange("cpf", e.target.value)}
-                      placeholder="000.000.000-00"
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        if (value.length <= 11) {
+                          handleInputChange("cpf", value);
+                        }
+                      }}
+                      placeholder="Somente n\u00fameros (11 d\u00edgitos)"
+                      maxLength={11}
                       required
                     />
                   </div>
@@ -244,11 +275,15 @@ export default function Home() {
                   </div>
 
                   <div>
-                    <Label htmlFor="numero">Número *</Label>
+                    <Label htmlFor="numero">N\u00famero *</Label>
                     <Input
                       id="numero"
                       value={formData.numero}
-                      onChange={(e) => handleInputChange("numero", e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        handleInputChange("numero", value);
+                      }}
+                      placeholder="Somente n\u00fameros"
                       required
                     />
                   </div>
@@ -277,8 +312,14 @@ export default function Home() {
                     <Input
                       id="cep"
                       value={formData.cep}
-                      onChange={(e) => handleInputChange("cep", e.target.value)}
-                      placeholder="00000-000"
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        if (value.length <= 8) {
+                          handleInputChange("cep", value);
+                        }
+                      }}
+                      placeholder="Somente n\u00fameros (8 d\u00edgitos)"
+                      maxLength={8}
                       required
                     />
                   </div>
