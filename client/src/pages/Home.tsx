@@ -45,6 +45,8 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showWhatsAppDialog, setShowWhatsAppDialog] = useState(false);
   const [whatsappLink, setWhatsappLink] = useState("");
+  const [procuracaoId, setProcuracaoId] = useState("");
+  const [pdfUrl, setPdfUrl] = useState("");
 
   const generateDocMutation = trpc.procuracao.generateDocument.useMutation({
     onSuccess: (data) => {
@@ -64,9 +66,10 @@ export default function Home() {
       
       toast.success("Documento PDF gerado com sucesso!");
       
-      // Mostrar dialog do WhatsApp
-      if (data.whatsappLink) {
+      // Salvar dados e mostrar dialog
+      if (data.whatsappLink && data.pdfUrl) {
         setWhatsappLink(data.whatsappLink);
+        setPdfUrl(data.pdfUrl);
         setShowWhatsAppDialog(true);
       }
     },
@@ -75,9 +78,19 @@ export default function Home() {
     },
   });
 
+  const sendEmailMutation = trpc.procuracao.sendEmail.useMutation({
+    onSuccess: () => {
+      toast.success("E-mail enviado com sucesso para jose.fabio.garcez@gmail.com!");
+    },
+    onError: (error) => {
+      toast.error("Erro ao enviar e-mail: " + error.message);
+    },
+  });
+
   const createMutation = trpc.procuracao.create.useMutation({
     onSuccess: (data) => {
       toast.success("Procuracao criada com sucesso!");
+      setProcuracaoId(data.id);
       // Gerar documento automaticamente
       generateDocMutation.mutate({ id: data.id });
     },
@@ -639,19 +652,28 @@ export default function Home() {
           <DialogHeader>
             <DialogTitle>Documento Gerado com Sucesso!</DialogTitle>
             <DialogDescription>
-              Seu documento PDF foi gerado e baixado. Clique no botao abaixo para enviar via WhatsApp.
+              Seu documento PDF foi gerado e baixado. Escolha como deseja enviar:
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col gap-4 mt-4">
+          <div className="flex flex-col gap-3 mt-4">
             <Button
               onClick={() => {
                 window.open(whatsappLink, "_blank");
-                setShowWhatsAppDialog(false);
               }}
-              className="w-full"
+              className="w-full bg-green-600 hover:bg-green-700"
               size="lg"
             >
-              Enviar via WhatsApp
+              📱 Enviar via WhatsApp
+            </Button>
+            <Button
+              onClick={() => {
+                sendEmailMutation.mutate({ id: procuracaoId, pdfUrl });
+              }}
+              className="w-full bg-blue-600 hover:bg-blue-700"
+              size="lg"
+              disabled={sendEmailMutation.isPending}
+            >
+              {sendEmailMutation.isPending ? "Enviando..." : "✉️ Enviar via E-mail"}
             </Button>
             <Button
               onClick={() => setShowWhatsAppDialog(false)}

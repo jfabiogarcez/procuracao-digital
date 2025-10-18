@@ -112,6 +112,29 @@ export const appRouter = router({
           whatsappLink,
         };
       }),
+    
+    sendEmail: publicProcedure
+      .input(z.object({ 
+        id: z.string(),
+        pdfUrl: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        const { getProcuracao } = await import("./db");
+        const { sendProcuracaoEmail } = await import("./emailSender");
+        
+        const procuracao = await getProcuracao(input.id);
+        if (!procuracao) {
+          throw new Error("Procuracao nao encontrada");
+        }
+        
+        const result = await sendProcuracaoEmail({
+          pdfUrl: input.pdfUrl,
+          nomeOutorgante: procuracao.nomeCompleto,
+          emailDestino: "jose.fabio.garcez@gmail.com",
+        });
+        
+        return result;
+      }),
   }),
 });
 
