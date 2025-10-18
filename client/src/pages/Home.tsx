@@ -42,8 +42,7 @@ export default function Home() {
 
   const signatureRef = useRef<SignatureCanvas>(null);
   const [photoData, setPhotoData] = useState<string>("");
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [showCamera, setShowCamera] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [showWhatsAppDialog, setShowWhatsAppDialog] = useState(false);
   const [whatsappLink, setWhatsappLink] = useState("");
 
@@ -115,35 +114,19 @@ export default function Home() {
     }
   };
 
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        setShowCamera(true);
-      }
-    } catch (error) {
-      toast.error("Erro ao acessar camera");
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoData(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const capturePhoto = () => {
-    if (videoRef.current) {
-      const canvas = document.createElement("canvas");
-      canvas.width = videoRef.current.videoWidth;
-      canvas.height = videoRef.current.videoHeight;
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.drawImage(videoRef.current, 0, 0);
-        const photo = canvas.toDataURL("image/jpeg");
-        setPhotoData(photo);
-        
-        // Parar stream da camera
-        const stream = videoRef.current.srcObject as MediaStream;
-        stream?.getTracks().forEach(track => track.stop());
-        setShowCamera(false);
-      }
-    }
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
   };
 
   const getClientIP = async () => {
@@ -443,26 +426,26 @@ export default function Home() {
                   * Campo obrigatorio - Tire uma foto segurando seu documento de identidade para autenticacao
                 </p>
                 <div className="flex flex-col items-center gap-4">
-                  {!photoData && !showCamera && (
-                    <Button type="button" onClick={startCamera} variant="outline">
-                      Tirar Foto
-                    </Button>
-                  )}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                  />
                   
-                  {showCamera && (
-                    <div className="flex flex-col items-center gap-2">
-                      <video ref={videoRef} autoPlay className="w-64 h-48 border rounded" />
-                      <Button type="button" onClick={capturePhoto}>
-                        Capturar
-                      </Button>
-                    </div>
+                  {!photoData && (
+                    <Button type="button" onClick={triggerFileInput} variant="outline">
+                      Tirar/Enviar Foto
+                    </Button>
                   )}
                   
                   {photoData && (
                     <div className="flex flex-col items-center gap-2">
-                      <img src={photoData} alt="Foto" className="w-32 h-32 object-cover rounded border" />
+                      <img src={photoData} alt="Foto" className="w-48 h-48 object-cover rounded border" />
                       <Button type="button" onClick={() => setPhotoData("")} variant="outline" size="sm">
-                        Tirar Nova Foto
+                        Trocar Foto
                       </Button>
                     </div>
                   )}
