@@ -206,7 +206,7 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
   });
   
   yPosition -= 15;
-  addText("Nome Completo: " + procuracao.nomeCompleto.toUpperCase(), 9, false, "center");
+  addText(procuracao.nomeCompleto.toUpperCase(), 11, false, "center");
   yPosition -= 20;
 
   // Rodapé
