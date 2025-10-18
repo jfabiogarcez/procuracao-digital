@@ -63,17 +63,41 @@ export default function Home() {
 
   const createMutation = trpc.procuracao.create.useMutation({
     onSuccess: (data) => {
-      toast.success("Procura\u00e7\u00e3o criada com sucesso!");
+      toast.success("Procuracao criada com sucesso!");
       // Gerar documento automaticamente
       generateDocMutation.mutate({ id: data.id });
     },
     onError: (error) => {
-      toast.error("Erro ao criar procura\u00e7\u00e3o: " + error.message);
+      toast.error("Erro ao criar procuracao: " + error.message);
     },
   });
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const buscarEnderecoPorCep = async (cep: string) => {
+    if (cep.length === 8) {
+      try {
+        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const data = await response.json();
+        
+        if (!data.erro) {
+          setFormData((prev) => ({
+            ...prev,
+            endereco: data.logradouro || "",
+            bairro: data.bairro || "",
+            cidade: data.localidade || "",
+            estado: data.uf || "",
+          }));
+          toast.success("Endereco encontrado!");
+        } else {
+          toast.error("CEP nao encontrado");
+        }
+      } catch (error) {
+        toast.error("Erro ao buscar CEP");
+      }
+    }
   };
 
   const startCamera = async () => {
@@ -84,7 +108,7 @@ export default function Home() {
         setShowCamera(true);
       }
     } catch (error) {
-      toast.error("Erro ao acessar câmera");
+      toast.error("Erro ao acessar camera");
     }
   };
 
@@ -99,7 +123,7 @@ export default function Home() {
         const photo = canvas.toDataURL("image/jpeg");
         setPhotoData(photo);
         
-        // Parar stream da câmera
+        // Parar stream da camera
         const stream = videoRef.current.srcObject as MediaStream;
         stream?.getTracks().forEach(track => track.stop());
         setShowCamera(false);
@@ -134,14 +158,14 @@ export default function Home() {
         <div className="text-center mb-8">
           <img src="/logo-jfg.png" alt="JFG Advocacia" className="w-32 h-32 mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-gray-900 mb-2">JFG Advocacia</h1>
-          <p className="text-lg text-gray-600">Sistema de Procura\u00e7\u00e3o Digital</p>
+          <p className="text-lg text-gray-600">Sistema de Procuracao Digital</p>
         </div>
 
         <Card className="shadow-xl">
           <CardHeader>
-            <CardTitle className="text-2xl">Procuração</CardTitle>
+            <CardTitle className="text-2xl">Procuracao</CardTitle>
             <CardDescription>
-              Preencha os dados abaixo para gerar sua procuração digital
+              Preencha os dados abaixo para gerar sua procuracao digital
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -185,14 +209,14 @@ export default function Home() {
                         <SelectItem value="Solteiro(a)">Solteiro(a)</SelectItem>
                         <SelectItem value="Casado(a)">Casado(a)</SelectItem>
                         <SelectItem value="Divorciado(a)">Divorciado(a)</SelectItem>
-                        <SelectItem value="Viúvo(a)">Viúvo(a)</SelectItem>
+                        <SelectItem value="Viuvo(a)">Viuvo(a)</SelectItem>
                         <SelectItem value="Aposentado">Aposentado</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <Label htmlFor="profissao">Profiss\u00e3o *</Label>
+                    <Label htmlFor="profissao">Profissao *</Label>
                     <Select
                       value={formData.profissao}
                       onValueChange={(value) => handleInputChange("profissao", value)}
@@ -203,18 +227,18 @@ export default function Home() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Advogado(a)">Advogado(a)</SelectItem>
-                        <SelectItem value="M\u00e9dico(a)">M\u00e9dico(a)</SelectItem>
+                        <SelectItem value="Medico(a)">Medico(a)</SelectItem>
                         <SelectItem value="Engenheiro(a)">Engenheiro(a)</SelectItem>
                         <SelectItem value="Professor(a)">Professor(a)</SelectItem>
                         <SelectItem value="Contador(a)">Contador(a)</SelectItem>
                         <SelectItem value="Arquiteto(a)">Arquiteto(a)</SelectItem>
                         <SelectItem value="Enfermeiro(a)">Enfermeiro(a)</SelectItem>
                         <SelectItem value="Administrador(a)">Administrador(a)</SelectItem>
-                        <SelectItem value="Empres\u00e1rio(a)">Empres\u00e1rio(a)</SelectItem>
+                        <SelectItem value="Empresario(a)">Empresario(a)</SelectItem>
                         <SelectItem value="Comerciante">Comerciante</SelectItem>
-                        <SelectItem value="Funcion\u00e1rio(a) P\u00fablico(a)">Funcion\u00e1rio(a) P\u00fablico(a)</SelectItem>
+                        <SelectItem value="Funcionario(a) Publico(a)">Funcionario(a) Publico(a)</SelectItem>
                         <SelectItem value="Aposentado(a)">Aposentado(a)</SelectItem>
-                        <SelectItem value="Aut\u00f4nomo(a)">Aut\u00f4nomo(a)</SelectItem>
+                        <SelectItem value="Autonomo(a)">Autonomo(a)</SelectItem>
                         <SelectItem value="Estudante">Estudante</SelectItem>
                         <SelectItem value="Do lar">Do lar</SelectItem>
                         <SelectItem value="Outro">Outro</SelectItem>
@@ -231,7 +255,7 @@ export default function Home() {
                         const value = e.target.value.replace(/\D/g, "");
                         handleInputChange("rg", value);
                       }}
-                      placeholder="Somente n\u00fameros"
+                      placeholder="Somente numeros"
                       required
                     />
                   </div>
@@ -247,7 +271,7 @@ export default function Home() {
                           handleInputChange("cpf", value);
                         }
                       }}
-                      placeholder="Somente n\u00fameros (11 d\u00edgitos)"
+                      placeholder="Somente numeros (11 digitos)"
                       maxLength={11}
                       required
                     />
@@ -266,11 +290,31 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Endereço */}
+              {/* Endereco */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Endereço</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Endereco</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="cep">CEP *</Label>
+                    <Input
+                      id="cep"
+                      value={formData.cep}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        if (value.length <= 8) {
+                          handleInputChange("cep", value);
+                          if (value.length === 8) {
+                            buscarEnderecoPorCep(value);
+                          }
+                        }
+                      }}
+                      placeholder="Somente numeros (8 digitos)"
+                      maxLength={8}
+                      required
+                    />
+                  </div>
+
                   <div className="md:col-span-2">
                     <Label htmlFor="endereco">Logradouro *</Label>
                     <Input
@@ -282,7 +326,7 @@ export default function Home() {
                   </div>
 
                   <div>
-                    <Label htmlFor="numero">N\u00famero *</Label>
+                    <Label htmlFor="numero">Numero *</Label>
                     <Input
                       id="numero"
                       value={formData.numero}
@@ -290,7 +334,7 @@ export default function Home() {
                         const value = e.target.value.replace(/\D/g, "");
                         handleInputChange("numero", value);
                       }}
-                      placeholder="Somente n\u00fameros"
+                      placeholder="Somente numeros"
                       required
                     />
                   </div>
@@ -310,23 +354,6 @@ export default function Home() {
                       id="bairro"
                       value={formData.bairro}
                       onChange={(e) => handleInputChange("bairro", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="cep">CEP *</Label>
-                    <Input
-                      id="cep"
-                      value={formData.cep}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, "");
-                        if (value.length <= 8) {
-                          handleInputChange("cep", value);
-                        }
-                      }}
-                      placeholder="Somente n\u00fameros (8 d\u00edgitos)"
-                      maxLength={8}
                       required
                     />
                   </div>
@@ -355,9 +382,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Foto de Autenticação */}
+              {/* Foto de Autenticacao */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Foto de Autenticação</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Foto de Autenticacao</h3>
                 <div className="flex flex-col items-center gap-4">
                   {!photoData && !showCamera && (
                     <Button type="button" onClick={startCamera} variant="outline">
@@ -385,13 +412,13 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Outorgado (Pré-preenchido) */}
+              {/* Outorgado (Pre-preenchido) */}
               <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
                 <h3 className="text-lg font-semibold text-gray-900">Outorgado (Advogado)</h3>
                 <div className="space-y-2 text-sm text-gray-700">
-                  <p><strong>Nome:</strong> Dr. José Fábio Garcez</p>
+                  <p><strong>Nome:</strong> Dr. Jose Fabio Garcez</p>
                   <p><strong>OAB/SP:</strong> 504.270</p>
-                  <p><strong>Endereço:</strong> Rua Capitão Antônio Rosa, nº 409, 1º Andar, Edifício Spaces, Jardim Paulistano, São Paulo/SP, CEP 01443-010</p>
+                  <p><strong>Endereco:</strong> Rua Capitao Antonio Rosa, n 409, 1 Andar, Edificio Spaces, Jardim Paulistano, Sao Paulo/SP, CEP 01443-010</p>
                   <p><strong>E-mail:</strong> jose.fabio.garcez@gmail.com</p>
                   <p><strong>Telefone:</strong> (11) 94721-9180</p>
                 </div>
@@ -399,7 +426,7 @@ export default function Home() {
 
               {/* Data */}
               <div className="space-y-2">
-                <Label>Data de Emissão</Label>
+                <Label>Data de Emissao</Label>
                 <Input
                   value={new Date().toLocaleDateString("pt-BR", {
                     day: "2-digit",
@@ -427,7 +454,7 @@ export default function Home() {
                 </Button>
               </div>
 
-              {/* Botão de Envio */}
+              {/* Botao de Envio */}
               <div className="flex justify-center pt-4">
                 <Button
                   type="submit"
@@ -435,16 +462,16 @@ export default function Home() {
                   disabled={createMutation.isPending}
                   className="w-full md:w-auto"
                 >
-                  {createMutation.isPending ? "Processando..." : "Salvar e Enviar Procuração"}
+                  {createMutation.isPending ? "Processando..." : "Salvar e Enviar Procuracao"}
                 </Button>
               </div>
             </form>
           </CardContent>
         </Card>
 
-        {/* Rodapé */}
+        {/* Rodape */}
         <div className="mt-8 text-center text-sm text-gray-600">
-          <p>Rua Capitão Antônio Rosa, 409, 1º Andar, Edifício Spaces, Jardim Paulistano, São Paulo/SP, CEP 01443-010</p>
+          <p>Rua Capitao Antonio Rosa, 409, 1 Andar, Edificio Spaces, Jardim Paulistano, Sao Paulo/SP, CEP 01443-010</p>
           <p>WhatsApp: (11) 9 4721-9180 / Tel. (11) 94721-9180</p>
           <p>E-mail: jose.fabio.garcez@gmail.com</p>
         </div>
