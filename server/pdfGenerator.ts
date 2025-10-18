@@ -192,11 +192,9 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
     }
   }
 
-  // Dados completos do outorgante abaixo da assinatura
+  // Nome do outorgante abaixo da assinatura
+  yPosition -= 5;
   addText(procuracao.nomeCompleto.toUpperCase(), 10, true, "center");
-  addText(`${procuracao.nacionalidade}, ${procuracao.estadoCivil}, ${procuracao.profissao}`, 9, false, "center");
-  addText(`RG: ${procuracao.rg}`, 9, false, "center");
-  addText(`CPF: ${procuracao.cpf}`, 9, false, "center");
   yPosition -= 20;
 
   // Rodapé
