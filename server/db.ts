@@ -85,4 +85,31 @@ export async function getUser(id: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Funções para procurações
+import { InsertProcuracao, procuracoes, Procuracao } from "../drizzle/schema";
+
+export async function createProcuracao(data: InsertProcuracao): Promise<Procuracao> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.insert(procuracoes).values(data);
+  const result = await db.select().from(procuracoes).where(eq(procuracoes.id, data.id!)).limit(1);
+  
+  if (result.length === 0) {
+    throw new Error("Failed to create procuracao");
+  }
+  
+  return result[0];
+}
+
+export async function getProcuracao(id: string): Promise<Procuracao | undefined> {
+  const db = await getDb();
+  if (!db) {
+    return undefined;
+  }
+
+  const result = await db.select().from(procuracoes).where(eq(procuracoes.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
