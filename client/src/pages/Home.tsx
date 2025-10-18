@@ -619,20 +619,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Aviso Legal */}
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-                <h4 className="font-semibold text-yellow-800 mb-2">
-                  ⚠️ Importante - Validade Juridica
-                </h4>
-                <ul className="text-sm text-yellow-700 space-y-1">
-                  <li>• Esta procuracao e valida nos termos da Lei 14.063/2020</li>
-                  <li>• Para plena validade, recomenda-se reconhecimento de firma em cartorio</li>
-                  <li>• A inclusao de testemunhas aumenta a seguranca juridica</li>
-                  <li>• A foto com documento e obrigatoria para autenticacao</li>
-                  <li>• Seus dados de localizacao e IP serao registrados para seguranca</li>
-                </ul>
-              </div>
-
               {/* Botao de Envio */}
               <div className="flex justify-center pt-4">
                 <Button
