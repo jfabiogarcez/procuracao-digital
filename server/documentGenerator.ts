@@ -11,6 +11,8 @@ import {
   convertInchesToTwip,
 } from "docx";
 import { Procuracao } from "../drizzle/schema";
+import * as fs from "fs";
+import * as path from "path";
 
 export async function generateProcuracaoDocument(procuracao: Procuracao): Promise<Buffer> {
   // Converter base64 para buffer
@@ -52,10 +54,24 @@ export async function generateProcuracaoDocument(procuracao: Procuracao): Promis
               new Paragraph({
                 alignment: AlignmentType.CENTER,
                 children: [
+                  new ImageRun({
+                    data: fs.readFileSync(path.join(__dirname, "../client/public/logo-jfg.png")),
+                    transformation: {
+                      width: 150,
+                      height: 150,
+                    },
+                    type: "png",
+                  }),
+                ],
+                spacing: { after: 200 },
+              }),
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
                   new TextRun({
                     text: "JFG ADVOCACIA",
                     bold: true,
-                    size: 32,
+                    size: 28,
                   }),
                 ],
               }),

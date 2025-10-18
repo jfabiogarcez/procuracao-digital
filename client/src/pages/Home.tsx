@@ -125,8 +125,9 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
+          <img src="/logo-jfg.png" alt="JFG Advocacia" className="w-32 h-32 mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-gray-900 mb-2">JFG Advocacia</h1>
-          <p className="text-lg text-gray-600">Sistema de Procuração Digital</p>
+          <p className="text-lg text-gray-600">Sistema de Procura\u00e7\u00e3o Digital</p>
         </div>
 
         <Card className="shadow-xl">
