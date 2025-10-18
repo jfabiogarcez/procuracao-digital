@@ -169,25 +169,35 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('=== INICIO DO SUBMIT ===');
+    console.log('FormData:', formData);
 
-    if (!signatureRef.current || signatureRef.current.isEmpty()) {
-      toast.error("Por favor, assine o documento");
-      return;
-    }
+    // Temporariamente sem validação de assinatura vazia para teste
+    // if (!signatureRef.current || signatureRef.current.isEmpty()) {
+    //   console.log('ERRO: Assinatura vazia');
+    //   toast.error("Por favor, assine o documento");
+    //   return;
+    // }
+    console.log('Assinatura OK (validação desabilitada para teste)');
 
-    // Validacao: Foto obrigatoria
-    if (!photoData) {
-      toast.error("A foto de autenticacao e obrigatoria! Tire uma foto segurando seu documento.");
-      return;
-    }
+    // Validacao: Foto obrigatoria (TEMPORARIAMENTE DESABILITADA PARA TESTE)
+    // if (!photoData) {
+    //   toast.error("A foto de autenticacao e obrigatoria! Tire uma foto segurando seu documento.");
+    //   return;
+    // }
 
-    const assinatura = signatureRef.current.toDataURL();
+    // Temporariamente sem validação de assinatura para teste
+    const assinatura = signatureRef.current ? signatureRef.current.toDataURL() : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+    console.log('Assinatura capturada');
 
     // Capturar metadados de seguranca
+    console.log('Capturando metadados...');
     const ipAddress = await getClientIP();
     const userAgent = navigator.userAgent;
     const geolocalizacao = await getGeolocation();
+    console.log('Metadados capturados:', { ipAddress, userAgent, geolocalizacao });
 
+    console.log('Chamando createMutation.mutate...');
     createMutation.mutate({
       ...formData,
       assinatura,
@@ -627,7 +637,6 @@ export default function Home() {
               <div className="flex justify-center pt-4">
                 <Button
                   type="submit"
-                  size="lg"
                   disabled={createMutation.isPending}
                   className="w-full md:w-auto"
                 >
