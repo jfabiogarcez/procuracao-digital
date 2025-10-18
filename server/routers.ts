@@ -68,19 +68,37 @@ export const appRouter = router({
       .input(z.object({ id: z.string() }))
       .mutation(async ({ input }) => {
         const { getProcuracao } = await import("./db");
-        const { generateProcuracaoDocument } = await import("./documentGenerator");
+        const { generateProcuracaoPDF } = await import("./pdfGenerator");
+        const { storagePut } = await import("./storage");
         
         const procuracao = await getProcuracao(input.id);
         if (!procuracao) {
-          throw new Error("Procura\u00e7\u00e3o n\u00e3o encontrada");
+          throw new Error("Procuracao nao encontrada");
         }
         
-        const docBuffer = await generateProcuracaoDocument(procuracao);
-        const base64Doc = docBuffer.toString("base64");
+        const pdfBuffer = await generateProcuracaoPDF(procuracao);
+        const base64Pdf = pdfBuffer.toString("base64");
+        
+        // Upload para S3
+        const filename = `procuracao_${procuracao.nomeCompleto.replace(/\s+/g, "_")}_${input.id}.pdf`;
+        const { url: pdfUrl } = await storagePut(
+          `procuracoes/${filename}`,
+          pdfBuffer,
+          "application/pdf"
+        );
+        
+        // Gerar link do WhatsApp
+        const whatsappNumber = "5511947219180"; // (11) 94721-9180
+        const message = encodeURIComponent(
+          `Procuracao Digital - ${procuracao.nomeCompleto}\n\nDocumento: ${pdfUrl}`
+        );
+        const whatsappLink = `https://wa.me/${whatsappNumber}?text=${message}`;
         
         return {
-          document: base64Doc,
-          filename: `procuracao_${procuracao.nomeCompleto.replace(/\s+/g, "_")}_${input.id}.docx`,
+          document: base64Pdf,
+          filename,
+          pdfUrl,
+          whatsappLink,
         };
       }),
   }),

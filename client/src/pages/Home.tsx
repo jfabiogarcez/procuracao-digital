@@ -33,10 +33,10 @@ export default function Home() {
 
   const generateDocMutation = trpc.procuracao.generateDocument.useMutation({
     onSuccess: (data) => {
-      // Download do documento
+      // Download do documento PDF
       const blob = new Blob(
         [Uint8Array.from(atob(data.document), c => c.charCodeAt(0))],
-        { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }
+        { type: "application/pdf" }
       );
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -47,7 +47,14 @@ export default function Home() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
       
-      toast.success("Documento gerado com sucesso!");
+      toast.success("Documento PDF gerado com sucesso!");
+      
+      // Abrir WhatsApp
+      if (data.whatsappLink) {
+        setTimeout(() => {
+          window.open(data.whatsappLink, "_blank");
+        }, 500);
+      }
     },
     onError: (error) => {
       toast.error("Erro ao gerar documento: " + error.message);
