@@ -100,10 +100,11 @@ export default function Home() {
       return;
     }
 
-    if (!photoData) {
-      toast.error("Por favor, envie uma foto de autenticação!");
-      return;
-    }
+    // Foto opcional para teste
+    // if (!photoData) {
+    //   toast.error("Por favor, envie uma foto de autenticação!");
+    //   return;
+    // }
 
     if (signatureRef.current?.isEmpty()) {
       toast.error("Por favor, assine o documento!");
