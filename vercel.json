@@ -15,6 +15,10 @@
   ],
   "routes": [
     {
+      "src": "/logo-jfg.png",
+      "dest": "/logo-jfg.png"
+    },
+    {
       "src": "/assets/(.*)",
       "dest": "/assets/$1"
     },
