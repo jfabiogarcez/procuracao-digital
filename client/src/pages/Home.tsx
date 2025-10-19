@@ -215,10 +215,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <img src="/logo-jfg.png" alt="Procuracao e Contrato" className="w-32 h-32 mx-auto mb-4" />
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Procuracao e Contrato</h1>
-          <p className="text-lg text-gray-600">Sistema Digital</p>
+        <div className="mb-8">
+          <img src="/logo-jfg.png" alt="Procuracao e Contrato" className="w-24 h-24" />
         </div>
 
         <Card className="shadow-xl">
@@ -628,12 +626,7 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        {/* Rodape */}
-        <div className="mt-8 text-center text-sm text-gray-600">
-          <p>Rua Capitao Antonio Rosa, 409, 1 Andar, Edificio Spaces, Jardim Paulistano, Sao Paulo/SP, CEP 01443-010</p>
-          <p>WhatsApp: (11) 9 4721-9180 / Tel. (11) 94721-9180</p>
-          <p>E-mail: jose.fabio.garcez@gmail.com</p>
-        </div>
+
       </div>
 
       {/* Dialog do WhatsApp */}
