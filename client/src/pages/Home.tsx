@@ -87,17 +87,46 @@ export default function Home() {
     },
   });
 
-  const createMutation = trpc.procuracao.create.useMutation({
-    onSuccess: (data) => {
-      toast.success("Procuracao criada com sucesso!");
-      setProcuracaoId(data.id);
-      // Gerar documento automaticamente passando os dados
-      generateDocMutation.mutate({ id: data.id, procuracaoData: data });
+  const createMutation = {
+    mutate: async (data: any) => {
+      try {
+        // Chamar a API serverless do Vercel
+        const response = await fetch('/api/generate-pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          throw new Error('Erro ao gerar PDF');
+        }
+
+        // Baixar o PDF
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'procuracao.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        toast.success("Procuração criada e PDF gerado com sucesso!");
+        
+        // Mostrar dialog do WhatsApp
+        const whatsappMessage = encodeURIComponent(
+          `Olá Dr. Jose Fabio Garcez, segue minha procuração digital.\n\nNome: ${data.nomeCompleto}\nCPF: ${data.cpf}\nE-mail: ${data.email}`
+        );
+        setWhatsappLink(`https://wa.me/5511947219180?text=${whatsappMessage}`);
+        setShowWhatsAppDialog(true);
+      } catch (error: any) {
+        toast.error("Erro ao criar procuração: " + error.message);
+      }
     },
-    onError: (error) => {
-      toast.error("Erro ao criar procuracao: " + error.message);
-    },
-  });
+    isLoading: false,
+    isPending: false
+  };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
