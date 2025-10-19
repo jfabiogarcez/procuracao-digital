@@ -11,14 +11,16 @@ import "./index.css";
 const queryClient = new QueryClient();
 
 const redirectToLoginIfUnauthorized = (error: unknown) => {
-  if (!(error instanceof TRPCClientError)) return;
-  if (typeof window === "undefined") return;
+  // Desabilitado para permitir acesso público ao formulário
+  // if (!(error instanceof TRPCClientError)) return;
+  // if (typeof window === "undefined") return;
 
-  const isUnauthorized = error.message === UNAUTHED_ERR_MSG;
+  // const isUnauthorized = error.message === UNAUTHED_ERR_MSG;
 
-  if (!isUnauthorized) return;
+  // if (!isUnauthorized) return;
 
-  window.location.href = getLoginUrl();
+  // window.location.href = getLoginUrl();
+  return; // Não redirecionar
 };
 
 queryClient.getQueryCache().subscribe(event => {

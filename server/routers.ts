@@ -52,18 +52,20 @@ export const appRouter = router({
         })
       )
       .mutation(async ({ input }) => {
-        const { createProcuracao } = await import("./db");
         const { nanoid } = await import("nanoid");
         const QRCode = (await import("qrcode")).default;
         
         const id = nanoid();
         const qrCodeData = await QRCode.toDataURL(id);
         
-        const procuracao = await createProcuracao({
+        // Retornar dados sem salvar no banco
+        const procuracao = {
           id,
           ...input,
           qrCode: qrCodeData,
-        });
+          dataEmissao: new Date(),
+          createdAt: new Date(),
+        };
         
         return procuracao;
       }),
@@ -76,39 +78,34 @@ export const appRouter = router({
       }),
     
     generateDocument: publicProcedure
-      .input(z.object({ id: z.string() }))
+      .input(z.object({ 
+        id: z.string(),
+        procuracaoData: z.any(),
+      }))
       .mutation(async ({ input }) => {
-        const { getProcuracao } = await import("./db");
         const { generateProcuracaoPDF } = await import("./pdfGenerator");
-        const { storagePut } = await import("./storage");
         
-        const procuracao = await getProcuracao(input.id);
+        const procuracao = input.procuracaoData;
         if (!procuracao) {
-          throw new Error("Procuracao nao encontrada");
+          throw new Error("Dados da procuracao nao fornecidos");
         }
         
         const pdfBuffer = await generateProcuracaoPDF(procuracao);
         const base64Pdf = pdfBuffer.toString("base64");
         
-        // Upload para S3
         const filename = `procuracao_${procuracao.nomeCompleto.replace(/\s+/g, "_")}_${input.id}.pdf`;
-        const { url: pdfUrl } = await storagePut(
-          `procuracoes/${filename}`,
-          pdfBuffer,
-          "application/pdf"
-        );
         
-        // Gerar link do WhatsApp
+        // Gerar link do WhatsApp (sem URL do PDF, apenas mensagem)
         const whatsappNumber = "5511947219180"; // (11) 94721-9180
         const message = encodeURIComponent(
-          `Procuracao Digital - ${procuracao.nomeCompleto}\n\nDocumento: ${pdfUrl}`
+          `Ol\u00e1! Segue em anexo a Procura\u00e7\u00e3o Digital de ${procuracao.nomeCompleto}.`
         );
         const whatsappLink = `https://wa.me/${whatsappNumber}?text=${message}`;
         
         return {
           document: base64Pdf,
           filename,
-          pdfUrl,
+          pdfUrl: "", // Sem upload, apenas download local
           whatsappLink,
         };
       }),

@@ -67,9 +67,9 @@ export default function Home() {
       toast.success("Documento PDF gerado com sucesso!");
       
       // Salvar dados e mostrar dialog
-      if (data.whatsappLink && data.pdfUrl) {
+      if (data.whatsappLink) {
         setWhatsappLink(data.whatsappLink);
-        setPdfUrl(data.pdfUrl);
+        setPdfUrl(data.pdfUrl || "");
         setShowWhatsAppDialog(true);
       }
     },
@@ -91,8 +91,8 @@ export default function Home() {
     onSuccess: (data) => {
       toast.success("Procuracao criada com sucesso!");
       setProcuracaoId(data.id);
-      // Gerar documento automaticamente
-      generateDocMutation.mutate({ id: data.id });
+      // Gerar documento automaticamente passando os dados
+      generateDocMutation.mutate({ id: data.id, procuracaoData: data });
     },
     onError: (error) => {
       toast.error("Erro ao criar procuracao: " + error.message);
