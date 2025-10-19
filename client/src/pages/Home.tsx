@@ -613,7 +613,11 @@ export default function Home() {
               {/* Botao de Envio */}
               <div className="flex justify-center pt-4">
                 <Button
-                  type="submit"
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSubmit(e as any);
+                  }}
                   disabled={createMutation.isPending}
                   className="w-full md:w-auto"
                 >
