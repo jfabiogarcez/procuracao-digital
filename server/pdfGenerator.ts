@@ -76,8 +76,6 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
   }
 
   // Cabeçalho
-  addText("JFG ADVOCACIA", 16, true, "center");
-  yPosition -= 10;
   addText("PROCURACAO", 14, true, "center");
   yPosition -= 20;
 
