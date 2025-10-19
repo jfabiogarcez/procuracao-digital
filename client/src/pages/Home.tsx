@@ -594,7 +594,9 @@ export default function Home() {
                   <SignatureCanvas
                     ref={signatureRef}
                     canvasProps={{
-                      className: "w-full h-8 bg-white",
+                      className: "w-full bg-white",
+                      width: 400,
+                      height: 200,
                     }}
                   />
                 </div>
@@ -611,11 +613,7 @@ export default function Home() {
               {/* Botao de Envio */}
               <div className="flex justify-center pt-4">
                 <Button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSubmit(e as any);
-                  }}
+                  type="submit"
                   disabled={createMutation.isPending}
                   className="w-full md:w-auto"
                 >

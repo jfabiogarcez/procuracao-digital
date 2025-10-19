@@ -54,29 +54,10 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
     }
   };
 
-  // Logo (se existir)
-  try {
-    const logoPath = path.join(__dirname, "../client/public/logo-jfg.png");
-    if (fs.existsSync(logoPath)) {
-      const logoBytes = fs.readFileSync(logoPath);
-      const logoImage = await pdfDoc.embedPng(logoBytes);
-      const logoDims = logoImage.scale(0.15);
-      
-      page.drawImage(logoImage, {
-        x: (width - logoDims.width) / 2,
-        y: yPosition - logoDims.height,
-        width: logoDims.width,
-        height: logoDims.height,
-      });
-      
-      yPosition -= logoDims.height + 10;
-    }
-  } catch (error) {
-    console.log("Logo não encontrado, continuando sem logo");
-  }
+  // Logo removido conforme solicitação do usuário
 
   // Cabeçalho
-  addText("PROCURACAO", 14, true, "center");
+  addText("PROCURAÇÃO", 14, true, "center");
   yPosition -= 20;
 
   // Dados do Outorgante
@@ -97,39 +78,39 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
   yPosition -= 5;
   
   addParagraph(
-    "Dr. JOSE FABIO GARCEZ, brasileiro, casado, inscrito na Ordem dos Advogados do Brasil, Seccional de Sao Paulo (OAB/SP) sob o n 504.270, com escritorio profissional situado a Rua Capitao Antonio Rosa, n 409, 1 Andar, Edificio Spaces, Jardim Paulistano, Sao Paulo/SP, CEP 01443-010, endereco eletronico: jose.fabio.garcez@gmail.com, telefone: (11) 94721-9180.",
+    "Dr. JOSÉ FÁBIO GARCEZ, brasileiro, casado, inscrito na Ordem dos Advogados do Brasil, Seccional de São Paulo (OAB/SP) sob o n 504.270, com escritório profissional situado a Rua Capitão Antonio Rosa, n 409, 1 Andar, Edifício Spaces, Jardim Paulistano, São Paulo/SP, CEP 01443-010, endereço eletrônico: jose.fabio.garcez@gmail.com, telefone: (11) 94721-9180.",
     10
   );
   yPosition -= 10;
 
   // Poderes
   addParagraph(
-    "Ao qual confere, com a mais ampla, geral e ilimitada quitacao, poderes para atuar em seu nome, nos termos das clausulas 'ad judicia' e 'ad negotia', conforme segue:",
+    "Ao qual confere, com a mais ampla, geral e ilimitada quitação, poderes para atuar em seu nome, nos termos das cláusulas 'ad judicia' e 'ad negotia', conforme segue:",
     10
   );
   yPosition -= 5;
 
   addParagraph(
-    "Clausula 'ad judicia': Poderes amplos para representar o outorgante em juizo, com capacidade de propor acoes, apresentar defesas, interpor recursos e acompanhar as demandas judiciais ate sua solucao final, seja qual for a instancia ou tribunal;",
+    "Cláusula 'ad judicia': Poderes amplos para representar o outorgante em juízo, com capacidade de propor ações, apresentar defesas, interpor recursos e acompanhar as demandas judiciais até sua solução final, seja qual for a instância ou tribunal;",
     10
   );
   yPosition -= 5;
 
   addParagraph(
-    "Clausula 'ad negotia': Poderes para atuar em questoes extrajudiciais, representando o outorgante perante orgaos da Administracao Publica, sejam eles da esfera Federal, Estadual ou Municipal, bem como perante entidades de classe, sindicatos, associacoes e instituicoes particulares;",
+    "Cláusula 'ad negotia': Poderes para atuar em questões extrajudiciais, representando o outorgante perante órgãos da Administração Pública, sejam eles da esfera Federal, Estadual ou Municipal, bem como perante entidades de classe, sindicatos, associações e instituições particulares;",
     10
   );
   yPosition -= 5;
 
   addParagraph(
-    "Poderes especiais: Confere-se ao procurador poderes para confessar, desistir, transigir, firmar acordos, dar e receber quitacao, requerer justica gratuita, substabelecer com ou sem reservas de iguais poderes e praticar todos os atos necessarios ao pleno exercicio do mandato, observadas as disposicoes legais aplicaveis.",
+    "Poderes especiais: Confere-se ao procurador poderes para confessar, desistir, transigir, firmar acordos, dar e receber quitação, requerer justiça gratuita, substabelecer com ou sem reservas de iguais poderes e praticar todos os atos necessários ao pleno exercício do mandato, observadas as disposições legais aplicáveis.",
     10
   );
   yPosition -= 10;
 
   // Fundamentação Legal
   addParagraph(
-    "Este mandato e outorgado com fundamento nos arts. 105 e 106 do Codigo de Processo Civil (Lei 13.105/2015), na Constituicao Federal de 1988 e na legislacao correlata, sendo dado por bom, firme e valioso, desde sua assinatura.",
+    "Este mandato é outorgado com fundamento nos arts. 105 e 106 do Código de Processo Civil (Lei 13.105/2015), na Constituição Federal de 1988 e na legislação correlata, sendo dado por bom, firme e valioso, desde sua assinatura.",
     10
   );
   yPosition -= 10;
@@ -147,7 +128,7 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
         year: "numeric",
       });
   
-  addText(`Sao Paulo, ${dataFormatada}.`, 10);
+  addText(`São Paulo, ${dataFormatada}.`, 10);
   yPosition -= 30;
 
   // Foto de Autenticacao (se houver)
@@ -175,16 +156,16 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
     try {
       const assinaturaBuffer = Buffer.from(procuracao.assinatura.split(",")[1], "base64");
       const assinaturaImage = await pdfDoc.embedPng(assinaturaBuffer);
-      const assinaturaDims = assinaturaImage.scale(0.5);
+      const assinaturaDims = assinaturaImage.scale(1.0);
       
       page.drawImage(assinaturaImage, {
-        x: (width - assinaturaDims.width) / 2,
-        y: yPosition - assinaturaDims.height,
-        width: assinaturaDims.width,
-        height: assinaturaDims.height,
+        x: (width - (assinaturaDims.width * 0.7)) / 2,
+        y: yPosition - (assinaturaDims.height * 0.7),
+        width: assinaturaDims.width * 0.7,
+        height: assinaturaDims.height * 0.7,
       });
       
-      yPosition -= assinaturaDims.height + 5;
+      yPosition -= (assinaturaDims.height * 0.7) + 5;
     } catch (error) {
       console.log("Erro ao adicionar assinatura");
     }
@@ -256,16 +237,13 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
     }
   }
 
-  // Aviso legal
-  yPosition -= 20;
-  addParagraph("AVISO LEGAL: Esta procuracao particular requer reconhecimento de firma em cartorio para plena validade juridica. A assinatura digital possui validade nos termos da Lei 14.063/2020, mas recomenda-se o reconhecimento de firma para eliminar questionamentos sobre autenticidade.", 7, false);
-  yPosition -= 10;
+  // Aviso legal removido conforme solicitação do usuário
 
   // Rodapé
   yPosition = 50;
-  addText("Rua Capitao Antonio Rosa, 409, 1 Andar, Edificio Spaces, Jardim Paulistano, Sao Paulo/SP, CEP 01443-010", 8, false, "center");
+  addText("Rua Capitão Antonio Rosa, 409, 1 Andar, Edifício Spaces, Jardim Paulistano, São Paulo/SP, CEP 01443-010", 8, false, "center");
   addText("WhatsApp: (11) 9 4721-9180 / Tel. (11) 94721-9180", 8, false, "center");
-  addText("E-mail: jose.fabio.garcez@gmail.com", 8, false, "center");
+  addText("E-mail: contato@jfg.adv.br", 8, false, "center");
 
   const pdfBytes = await pdfDoc.save();
   return Buffer.from(pdfBytes);
