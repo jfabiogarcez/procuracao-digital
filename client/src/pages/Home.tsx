@@ -10,10 +10,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { trpc } from "@/lib/trpc";
 import { useRef, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { toast } from "sonner";
+import { jsPDF } from "jspdf";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -45,118 +45,37 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showWhatsAppDialog, setShowWhatsAppDialog] = useState(false);
   const [whatsappLink, setWhatsappLink] = useState("");
-  const [procuracaoId, setProcuracaoId] = useState("");
-  const [pdfUrl, setPdfUrl] = useState("");
-
-  const generateDocMutation = trpc.procuracao.generateDocument.useMutation({
-    onSuccess: (data) => {
-      // Download do documento PDF
-      const blob = new Blob(
-        [Uint8Array.from(atob(data.document), c => c.charCodeAt(0))],
-        { type: "application/pdf" }
-      );
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = data.filename;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      
-      toast.success("Documento PDF gerado com sucesso!");
-      
-      // Salvar dados e mostrar dialog
-      if (data.whatsappLink) {
-        setWhatsappLink(data.whatsappLink);
-        setPdfUrl(data.pdfUrl || "");
-        setShowWhatsAppDialog(true);
-      }
-    },
-    onError: (error) => {
-      toast.error("Erro ao gerar documento: " + error.message);
-    },
-  });
-
-  const sendEmailMutation = trpc.procuracao.sendEmail.useMutation({
-    onSuccess: () => {
-      toast.success("E-mail enviado com sucesso para jose.fabio.garcez@gmail.com!");
-    },
-    onError: (error) => {
-      toast.error("Erro ao enviar e-mail: " + error.message);
-    },
-  });
-
-  const createMutation = {
-    mutate: async (data: any) => {
-      try {
-        // Chamar a API serverless do Vercel
-        const response = await fetch('/api/generate-pdf', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-
-        if (!response.ok) {
-          throw new Error('Erro ao gerar PDF');
-        }
-
-        // Baixar o PDF
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'procuracao.pdf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-
-        toast.success("Procuração criada e PDF gerado com sucesso!");
-        
-        // Mostrar dialog do WhatsApp
-        const whatsappMessage = encodeURIComponent(
-          `Olá Dr. Jose Fabio Garcez, segue minha procuração digital.\n\nNome: ${data.nomeCompleto}\nCPF: ${data.cpf}\nE-mail: ${data.email}`
-        );
-        setWhatsappLink(`https://wa.me/5511947219180?text=${whatsappMessage}`);
-        setShowWhatsAppDialog(true);
-      } catch (error: any) {
-        toast.error("Erro ao criar procuração: " + error.message);
-      }
-    },
-    isLoading: false,
-    isPending: false
-  };
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const buscarEnderecoPorCep = async (cep: string) => {
-    if (cep.length === 8) {
+  const handleCepBlur = async () => {
+    if (formData.cep.length === 8) {
       try {
-        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const response = await fetch(`https://viacep.com.br/ws/${formData.cep}/json/`);
         const data = await response.json();
-        
         if (!data.erro) {
           setFormData((prev) => ({
             ...prev,
-            endereco: data.logradouro || "",
-            bairro: data.bairro || "",
-            cidade: data.localidade || "",
-            estado: data.uf || "",
+            endereco: data.logradouro,
+            bairro: data.bairro,
+            cidade: data.localidade,
+            estado: data.uf,
           }));
-          toast.success("Endereco encontrado!");
-        } else {
-          toast.error("CEP nao encontrado");
         }
       } catch (error) {
-        toast.error("Erro ao buscar CEP");
+        console.error("Erro ao buscar CEP:", error);
       }
     }
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoCapture = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -167,118 +86,191 @@ export default function Home() {
     }
   };
 
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
-
-  const getClientIP = async () => {
-    try {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const data = await response.json();
-      return data.ip;
-    } catch {
-      return null;
-    }
-  };
-
-  const getGeolocation = (): Promise<string | null> => {
-    return new Promise((resolve) => {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            resolve(`${position.coords.latitude},${position.coords.longitude}`);
-          },
-          () => resolve(null)
-        );
-      } else {
-        resolve(null);
-      }
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('=== INICIO DO SUBMIT ===');
-    console.log('FormData:', formData);
-
-    // Validar campos obrigatórios
-    if (!formData.nomeCompleto || !formData.nacionalidade || !formData.estadoCivil || 
-        !formData.profissao || !formData.rg || !formData.cpf || !formData.email ||
-        !formData.endereco || !formData.numero || !formData.bairro || !formData.cep ||
-        !formData.cidade || !formData.estado) {
-      toast.error("Por favor, preencha todos os campos obrigatórios (marcados com *)");
-      return;
-    }
-
-    // Validar formato do email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast.error("Por favor, insira um email válido");
-      return;
-    }
-
-    // Temporariamente sem validação de assinatura vazia para teste
-    // if (!signatureRef.current || signatureRef.current.isEmpty()) {
-    //   console.log('ERRO: Assinatura vazia');
-    //   toast.error("Por favor, assine o documento");
-    //   return;
-    // }
-    console.log('Assinatura OK (validação desabilitada para teste)');
-
-    // Validacao: Foto obrigatoria (TEMPORARIAMENTE DESABILITADA PARA TESTE)
-    // if (!photoData) {
-    //   toast.error("A foto de autenticacao e obrigatoria! Tire uma foto segurando seu documento.");
-    //   return;
-    // }
-
-    // Temporariamente sem validação de assinatura para teste
-    const assinatura = signatureRef.current ? signatureRef.current.toDataURL() : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-    console.log('Assinatura capturada');
-
-    // Capturar metadados de seguranca
-    console.log('Capturando metadados...');
-    const ipAddress = await getClientIP();
-    const userAgent = navigator.userAgent;
-    const geolocalizacao = await getGeolocation();
-    console.log('Metadados capturados:', { ipAddress, userAgent, geolocalizacao });
-
-    console.log('Chamando createMutation.mutate...');
-    createMutation.mutate({
-      ...formData,
-      assinatura,
-      fotoAutenticacao: photoData,
-      ipAddress: ipAddress || undefined,
-      userAgent,
-      geolocalizacao: geolocalizacao || undefined,
-    });
-  };
-
   const clearSignature = () => {
     signatureRef.current?.clear();
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <img src="/logo-jfg.png" alt="Procuracao e Contrato" className="w-24 h-24" />
-        </div>
+  const generatePDF = () => {
+    // Validação
+    if (!formData.nomeCompleto || !formData.estadoCivil || !formData.profissao || 
+        !formData.rg || !formData.cpf || !formData.email || !formData.cep || 
+        !formData.endereco || !formData.numero || !formData.bairro || 
+        !formData.cidade || !formData.estado) {
+      toast.error("Por favor, preencha todos os campos obrigatórios!");
+      return;
+    }
 
-        <Card className="shadow-xl">
+    if (!photoData) {
+      toast.error("Por favor, envie uma foto de autenticação!");
+      return;
+    }
+
+    if (signatureRef.current?.isEmpty()) {
+      toast.error("Por favor, assine o documento!");
+      return;
+    }
+
+    setIsGenerating(true);
+
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
+      let yPos = 20;
+
+      // Título
+      doc.setFontSize(18);
+      doc.setFont("helvetica", "bold");
+      doc.text("PROCURAÇÃO", pageWidth / 2, yPos, { align: "center" });
+      yPos += 15;
+
+      // Dados do Outorgante
+      doc.setFontSize(14);
+      doc.text("OUTORGANTE", margin, yPos);
+      yPos += 10;
+
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Nome: ${formData.nomeCompleto}`, margin, yPos);
+      yPos += 7;
+      doc.text(`Nacionalidade: ${formData.nacionalidade}`, margin, yPos);
+      yPos += 7;
+      doc.text(`Estado Civil: ${formData.estadoCivil}`, margin, yPos);
+      yPos += 7;
+      doc.text(`Profissão: ${formData.profissao}`, margin, yPos);
+      yPos += 7;
+      doc.text(`RG: ${formData.rg}`, margin, yPos);
+      yPos += 7;
+      doc.text(`CPF: ${formData.cpf}`, margin, yPos);
+      yPos += 7;
+      doc.text(`E-mail: ${formData.email}`, margin, yPos);
+      yPos += 7;
+      doc.text(`Endereço: ${formData.endereco}, ${formData.numero}${formData.complemento ? ', ' + formData.complemento : ''}`, margin, yPos);
+      yPos += 7;
+      doc.text(`Bairro: ${formData.bairro}, ${formData.cidade}/${formData.estado}`, margin, yPos);
+      yPos += 7;
+      doc.text(`CEP: ${formData.cep}`, margin, yPos);
+      yPos += 15;
+
+      // Dados do Outorgado
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("OUTORGADO (ADVOGADO)", margin, yPos);
+      yPos += 10;
+
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "normal");
+      doc.text("Nome: Dr. Jose Fabio Garcez", margin, yPos);
+      yPos += 7;
+      doc.text("OAB/SP: 504.270", margin, yPos);
+      yPos += 7;
+      doc.text("Endereço: Rua Capitao Antonio Rosa, n 409, 1 Andar, Edificio Spaces", margin, yPos);
+      yPos += 7;
+      doc.text("Jardim Paulistano, Sao Paulo/SP, CEP 01443-010", margin, yPos);
+      yPos += 7;
+      doc.text("E-mail: jose.fabio.garcez@gmail.com", margin, yPos);
+      yPos += 7;
+      doc.text("Telefone: (11) 94721-9180", margin, yPos);
+      yPos += 15;
+
+      // Texto da procuração
+      doc.setFontSize(11);
+      const texto = `Pelo presente instrumento particular de procuração, o(a) OUTORGANTE acima qualificado(a) nomeia e constitui seu bastante procurador o Dr. Jose Fabio Garcez, advogado inscrito na OAB/SP sob o nº 504.270, a quem confere amplos poderes para representá-lo(a) em juízo ou fora dele, podendo propor ações, contestar, reconvir, desistir, transigir, firmar compromissos, receber e dar quitação, requerer o que for de direito, inclusive poderes especiais para confessar, desistir, transigir, firmar compromisso, receber e dar quitação, e praticar todos os atos necessários ao bom e fiel desempenho do presente mandato.`;
+      
+      const lines = doc.splitTextToSize(texto, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPos);
+      yPos += lines.length * 7 + 10;
+
+      // Testemunhas (se houver)
+      if (formData.testemunha1Nome || formData.testemunha2Nome) {
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("TESTEMUNHAS", margin, yPos);
+        yPos += 10;
+
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
+        if (formData.testemunha1Nome) {
+          doc.text(`1. ${formData.testemunha1Nome}`, margin, yPos);
+          yPos += 7;
+          if (formData.testemunha1Cpf) doc.text(`   CPF: ${formData.testemunha1Cpf}`, margin, yPos);
+          yPos += 7;
+          if (formData.testemunha1Rg) doc.text(`   RG: ${formData.testemunha1Rg}`, margin, yPos);
+          yPos += 10;
+        }
+
+        if (formData.testemunha2Nome) {
+          doc.text(`2. ${formData.testemunha2Nome}`, margin, yPos);
+          yPos += 7;
+          if (formData.testemunha2Cpf) doc.text(`   CPF: ${formData.testemunha2Cpf}`, margin, yPos);
+          yPos += 7;
+          if (formData.testemunha2Rg) doc.text(`   RG: ${formData.testemunha2Rg}`, margin, yPos);
+          yPos += 10;
+        }
+      }
+
+      // Data
+      yPos += 10;
+      const hoje = new Date().toLocaleDateString('pt-BR', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+      });
+      doc.text(`São Paulo, ${hoje}`, margin, yPos);
+      yPos += 15;
+
+      // Assinatura
+      if (signatureRef.current) {
+        const signatureData = signatureRef.current.toDataURL();
+        doc.addImage(signatureData, 'PNG', margin, yPos, 60, 20);
+      }
+      yPos += 25;
+      doc.text("_".repeat(40), margin, yPos);
+      yPos += 7;
+      doc.text(formData.nomeCompleto, margin, yPos);
+
+      // Salvar PDF
+      const filename = `procuracao_${formData.nomeCompleto.replace(/\s/g, '_')}_${Date.now()}.pdf`;
+      doc.save(filename);
+
+      toast.success("PDF gerado com sucesso!");
+
+      // Preparar link do WhatsApp
+      const mensagem = `Olá Dr. Jose Fabio Garcez, segue a procuração digital de ${formData.nomeCompleto}. O documento foi gerado e baixado.`;
+      const whatsappUrl = `https://wa.me/5511947219180?text=${encodeURIComponent(mensagem)}`;
+      setWhatsappLink(whatsappUrl);
+      setShowWhatsAppDialog(true);
+
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+      toast.error("Erro ao gerar PDF. Por favor, tente novamente.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    generatePDF();
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4">
+      <div className="max-w-4xl mx-auto">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">Procuracao</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-3xl font-bold text-center">Procuracao</CardTitle>
+            <CardDescription className="text-center">
               Preencha os dados abaixo para gerar sua procuracao digital
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Dados Pessoais */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Dados do Outorgante</h3>
-                
+              {/* Dados do Outorgante */}
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Dados do Outorgante</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
+                  <div>
                     <Label htmlFor="nomeCompleto">Nome Completo *</Label>
                     <Input
                       id="nomeCompleto"
@@ -287,7 +279,6 @@ export default function Home() {
                       required
                     />
                   </div>
-
                   <div>
                     <Label htmlFor="nacionalidade">Nacionalidade *</Label>
                     <Input
@@ -297,13 +288,11 @@ export default function Home() {
                       required
                     />
                   </div>
-
                   <div>
                     <Label htmlFor="estadoCivil">Estado Civil *</Label>
                     <Select
                       value={formData.estadoCivil}
                       onValueChange={(value) => handleInputChange("estadoCivil", value)}
-                      required
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione" />
@@ -317,13 +306,11 @@ export default function Home() {
                       </SelectContent>
                     </Select>
                   </div>
-
                   <div>
                     <Label htmlFor="profissao">Profissao *</Label>
                     <Select
                       value={formData.profissao}
                       onValueChange={(value) => handleInputChange("profissao", value)}
-                      required
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione" />
@@ -348,39 +335,27 @@ export default function Home() {
                       </SelectContent>
                     </Select>
                   </div>
-
                   <div>
                     <Label htmlFor="rg">RG *</Label>
                     <Input
                       id="rg"
-                      value={formData.rg}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, "");
-                        handleInputChange("rg", value);
-                      }}
                       placeholder="Somente numeros"
+                      value={formData.rg}
+                      onChange={(e) => handleInputChange("rg", e.target.value)}
                       required
                     />
                   </div>
-
                   <div>
                     <Label htmlFor="cpf">CPF *</Label>
                     <Input
                       id="cpf"
-                      value={formData.cpf}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, "");
-                        if (value.length <= 11) {
-                          handleInputChange("cpf", value);
-                        }
-                      }}
                       placeholder="Somente numeros (11 digitos)"
-                      maxLength={11}
+                      value={formData.cpf}
+                      onChange={(e) => handleInputChange("cpf", e.target.value)}
                       required
                     />
                   </div>
-
-                  <div>
+                  <div className="md:col-span-2">
                     <Label htmlFor="email">E-mail *</Label>
                     <Input
                       id="email"
@@ -393,31 +368,21 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Endereco */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Endereco</h3>
-                
+              {/* Endereço */}
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Endereco</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="cep">CEP *</Label>
                     <Input
                       id="cep"
-                      value={formData.cep}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, "");
-                        if (value.length <= 8) {
-                          handleInputChange("cep", value);
-                          if (value.length === 8) {
-                            buscarEnderecoPorCep(value);
-                          }
-                        }
-                      }}
                       placeholder="Somente numeros (8 digitos)"
-                      maxLength={8}
+                      value={formData.cep}
+                      onChange={(e) => handleInputChange("cep", e.target.value)}
+                      onBlur={handleCepBlur}
                       required
                     />
                   </div>
-
                   <div className="md:col-span-2">
                     <Label htmlFor="endereco">Logradouro *</Label>
                     <Input
@@ -427,21 +392,16 @@ export default function Home() {
                       required
                     />
                   </div>
-
                   <div>
                     <Label htmlFor="numero">Numero *</Label>
                     <Input
                       id="numero"
-                      value={formData.numero}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, "");
-                        handleInputChange("numero", value);
-                      }}
                       placeholder="Somente numeros"
+                      value={formData.numero}
+                      onChange={(e) => handleInputChange("numero", e.target.value)}
                       required
                     />
                   </div>
-
                   <div>
                     <Label htmlFor="complemento">Complemento</Label>
                     <Input
@@ -450,7 +410,6 @@ export default function Home() {
                       onChange={(e) => handleInputChange("complemento", e.target.value)}
                     />
                   </div>
-
                   <div>
                     <Label htmlFor="bairro">Bairro *</Label>
                     <Input
@@ -460,7 +419,6 @@ export default function Home() {
                       required
                     />
                   </div>
-
                   <div>
                     <Label htmlFor="cidade">Cidade *</Label>
                     <Input
@@ -470,146 +428,120 @@ export default function Home() {
                       required
                     />
                   </div>
-
                   <div>
                     <Label htmlFor="estado">Estado (UF) *</Label>
                     <Input
                       id="estado"
-                      value={formData.estado}
-                      onChange={(e) => handleInputChange("estado", e.target.value.toUpperCase())}
-                      maxLength={2}
                       placeholder="SP"
+                      value={formData.estado}
+                      onChange={(e) => handleInputChange("estado", e.target.value)}
                       required
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Foto de Autenticacao */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Foto de Autenticacao *</h3>
-                <p className="text-sm text-red-600">
+              {/* Foto de Autenticação */}
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Foto de Autenticacao *</h3>
+                <p className="text-sm text-gray-600 mb-4">
                   * Campo obrigatorio - Tire uma foto segurando seu documento de identidade para autenticacao
                 </p>
-                <div className="flex flex-col items-center gap-4">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={handlePhotoUpload}
-                    className="hidden"
-                  />
-                  
-                  {!photoData && (
-                    <Button type="button" onClick={triggerFileInput} variant="outline">
-                      Tirar/Enviar Foto
-                    </Button>
-                  )}
-                  
-                  {photoData && (
-                    <div className="flex flex-col items-center gap-2">
-                      <img src={photoData} alt="Foto" className="w-48 h-48 object-cover rounded border" />
-                      <Button type="button" onClick={() => setPhotoData("")} variant="outline" size="sm">
-                        Trocar Foto
-                      </Button>
-                    </div>
-                  )}
-                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <Button type="button" onClick={handlePhotoCapture} variant="outline">
+                  Tirar/Enviar Foto
+                </Button>
+                {photoData && (
+                  <div className="mt-4">
+                    <img src={photoData} alt="Foto de autenticacao" className="max-w-xs rounded-lg shadow-md" />
+                  </div>
+                )}
               </div>
 
               {/* Testemunhas */}
-              <div className="space-y-4 border-t pt-6">
-                <h3 className="text-lg font-semibold text-gray-900">Testemunhas (Opcional, mas Recomendado)</h3>
-                <p className="text-sm text-gray-600">
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Testemunhas (Opcional, mas Recomendado)</h3>
+                <p className="text-sm text-gray-600 mb-4">
                   A inclusao de testemunhas aumenta a seguranca juridica do documento
                 </p>
-                
-                {/* Testemunha 1 */}
-                <div className="border-t pt-4">
-                  <h4 className="font-medium mb-3">Testemunha 1</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label htmlFor="testemunha1Nome">Nome Completo</Label>
-                      <Input
-                        id="testemunha1Nome"
-                        value={formData.testemunha1Nome}
-                        onChange={(e) => handleInputChange("testemunha1Nome", e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="testemunha1Cpf">CPF</Label>
-                      <Input
-                        id="testemunha1Cpf"
-                        placeholder="Somente numeros (11 digitos)"
-                        maxLength={11}
-                        value={formData.testemunha1Cpf}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          handleInputChange("testemunha1Cpf", value);
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="testemunha1Rg">RG</Label>
-                      <Input
-                        id="testemunha1Rg"
-                        placeholder="Somente numeros"
-                        value={formData.testemunha1Rg}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          handleInputChange("testemunha1Rg", value);
-                        }}
-                      />
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium mb-2">Testemunha 1</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <Label htmlFor="testemunha1Nome">Nome Completo</Label>
+                        <Input
+                          id="testemunha1Nome"
+                          value={formData.testemunha1Nome}
+                          onChange={(e) => handleInputChange("testemunha1Nome", e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="testemunha1Cpf">CPF</Label>
+                        <Input
+                          id="testemunha1Cpf"
+                          placeholder="Somente numeros (11 digitos)"
+                          value={formData.testemunha1Cpf}
+                          onChange={(e) => handleInputChange("testemunha1Cpf", e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="testemunha1Rg">RG</Label>
+                        <Input
+                          id="testemunha1Rg"
+                          placeholder="Somente numeros"
+                          value={formData.testemunha1Rg}
+                          onChange={(e) => handleInputChange("testemunha1Rg", e.target.value)}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                {/* Testemunha 2 */}
-                <div className="border-t pt-4">
-                  <h4 className="font-medium mb-3">Testemunha 2</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label htmlFor="testemunha2Nome">Nome Completo</Label>
-                      <Input
-                        id="testemunha2Nome"
-                        value={formData.testemunha2Nome}
-                        onChange={(e) => handleInputChange("testemunha2Nome", e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="testemunha2Cpf">CPF</Label>
-                      <Input
-                        id="testemunha2Cpf"
-                        placeholder="Somente numeros (11 digitos)"
-                        maxLength={11}
-                        value={formData.testemunha2Cpf}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          handleInputChange("testemunha2Cpf", value);
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="testemunha2Rg">RG</Label>
-                      <Input
-                        id="testemunha2Rg"
-                        placeholder="Somente numeros"
-                        value={formData.testemunha2Rg}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          handleInputChange("testemunha2Rg", value);
-                        }}
-                      />
+
+                  <div>
+                    <h4 className="font-medium mb-2">Testemunha 2</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <Label htmlFor="testemunha2Nome">Nome Completo</Label>
+                        <Input
+                          id="testemunha2Nome"
+                          value={formData.testemunha2Nome}
+                          onChange={(e) => handleInputChange("testemunha2Nome", e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="testemunha2Cpf">CPF</Label>
+                        <Input
+                          id="testemunha2Cpf"
+                          placeholder="Somente numeros (11 digitos)"
+                          value={formData.testemunha2Cpf}
+                          onChange={(e) => handleInputChange("testemunha2Cpf", e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="testemunha2Rg">RG</Label>
+                        <Input
+                          id="testemunha2Rg"
+                          placeholder="Somente numeros"
+                          value={formData.testemunha2Rg}
+                          onChange={(e) => handleInputChange("testemunha2Rg", e.target.value)}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Outorgado (Pre-preenchido) */}
-              <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold text-gray-900">Outorgado (Advogado)</h3>
-                <div className="space-y-2 text-sm text-gray-700">
+              {/* Dados do Advogado */}
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4">Outorgado (Advogado)</h3>
+                <div className="space-y-2">
                   <p><strong>Nome:</strong> Dr. Jose Fabio Garcez</p>
                   <p><strong>OAB/SP:</strong> 504.270</p>
                   <p><strong>Endereco:</strong> Rua Capitao Antonio Rosa, n 409, 1 Andar, Edificio Spaces, Jardim Paulistano, Sao Paulo/SP, CEP 01443-010</p>
@@ -618,95 +550,77 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Data */}
-              <div className="space-y-2">
-                <Label>Data de Emissao</Label>
+              {/* Data de Emissão */}
+              <div>
+                <Label htmlFor="dataEmissao">Data de Emissao</Label>
                 <Input
-                  value={new Date().toLocaleDateString("pt-BR", {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
+                  id="dataEmissao"
+                  value={new Date().toLocaleDateString('pt-BR', { 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric' 
                   })}
                   disabled
-                  className="bg-gray-50"
                 />
               </div>
 
-              {/* Assinatura */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Assinatura Digital *</h3>
-                <div className="border-2 border-gray-300 rounded-lg overflow-hidden">
+              {/* Assinatura Digital */}
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Assinatura Digital *</h3>
+                <div className="border-2 border-gray-300 rounded-lg">
                   <SignatureCanvas
                     ref={signatureRef}
                     canvasProps={{
-                      className: "w-full bg-white",
-                      width: 400,
-                      height: 200,
+                      className: "w-full h-40 rounded-lg",
                     }}
                   />
                 </div>
-                <Button type="button" onClick={clearSignature} variant="outline" size="sm">
+                <Button
+                  type="button"
+                  onClick={clearSignature}
+                  variant="outline"
+                  className="mt-2"
+                >
                   Limpar Assinatura
                 </Button>
-                
-                {/* Linha para assinatura */}
-                <div className="border-t pt-4 mt-4 text-center">
-                  <div className="border-b-2 border-black w-64 mx-auto mb-2"></div>
-                </div>
               </div>
 
-              {/* Botao de Envio */}
-              <div className="flex justify-center pt-4">
-                <Button
-                  type="submit"
-                  disabled={createMutation.isPending}
-                  className="w-full md:w-auto"
+              <div className="border-t pt-6">
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  size="lg"
+                  disabled={isGenerating}
                 >
-                  {createMutation.isPending ? "Processando..." : "Salvar e Enviar Procuracao"}
+                  {isGenerating ? "Gerando PDF..." : "Salvar e Enviar Procuracao"}
                 </Button>
               </div>
             </form>
           </CardContent>
         </Card>
-
-
       </div>
 
       {/* Dialog do WhatsApp */}
       <Dialog open={showWhatsAppDialog} onOpenChange={setShowWhatsAppDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Documento Gerado com Sucesso!</DialogTitle>
+            <DialogTitle>Procuração Gerada com Sucesso!</DialogTitle>
             <DialogDescription>
-              Seu documento PDF foi gerado e baixado. Escolha como deseja enviar:
+              O PDF da procuração foi gerado e baixado. Agora você pode enviar para o advogado via WhatsApp.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col gap-3 mt-4">
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              Clique no botão abaixo para abrir o WhatsApp e enviar a procuração para o Dr. Jose Fabio Garcez.
+            </p>
             <Button
               onClick={() => {
                 window.open(whatsappLink, "_blank");
+                setShowWhatsAppDialog(false);
               }}
-              className="w-full bg-green-600 hover:bg-green-700"
-              size="lg"
-            >
-              📱 Enviar via WhatsApp
-            </Button>
-            <Button
-              onClick={() => {
-                sendEmailMutation.mutate({ id: procuracaoId, pdfUrl });
-              }}
-              className="w-full bg-blue-600 hover:bg-blue-700"
-              size="lg"
-              disabled={sendEmailMutation.isPending}
-            >
-              {sendEmailMutation.isPending ? "Enviando..." : "✉️ Enviar via E-mail"}
-            </Button>
-            <Button
-              onClick={() => setShowWhatsAppDialog(false)}
-              variant="outline"
               className="w-full"
             >
-              Fechar
+              Abrir WhatsApp
             </Button>
           </div>
         </DialogContent>
