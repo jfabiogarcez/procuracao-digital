@@ -35,7 +35,7 @@ export const appRouter = router({
           cep: z.string(),
           cidade: z.string(),
           estado: z.string(),
-          email: z.string().email(),
+          email: z.string().email("Email invalido. Por favor, insira um email valido."),
           assinatura: z.string(),
           fotoAutenticacao: z.string().optional(),
           // Testemunhas

@@ -172,6 +172,22 @@ export default function Home() {
     console.log('=== INICIO DO SUBMIT ===');
     console.log('FormData:', formData);
 
+    // Validar campos obrigatórios
+    if (!formData.nomeCompleto || !formData.nacionalidade || !formData.estadoCivil || 
+        !formData.profissao || !formData.rg || !formData.cpf || !formData.email ||
+        !formData.endereco || !formData.numero || !formData.bairro || !formData.cep ||
+        !formData.cidade || !formData.estado) {
+      toast.error("Por favor, preencha todos os campos obrigatórios (marcados com *)");
+      return;
+    }
+
+    // Validar formato do email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Por favor, insira um email válido");
+      return;
+    }
+
     // Temporariamente sem validação de assinatura vazia para teste
     // if (!signatureRef.current || signatureRef.current.isEmpty()) {
     //   console.log('ERRO: Assinatura vazia');
