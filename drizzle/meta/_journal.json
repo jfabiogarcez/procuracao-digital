@@ -22,6 +22,13 @@
       "when": 1760816934064,
       "tag": "0002_fresh_loa",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1761004305226,
+      "tag": "0003_quick_proteus",
+      "breakpoints": true
     }
   ]
 }
