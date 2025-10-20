@@ -14,9 +14,7 @@ import { useRef, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { toast } from "sonner";
 import { jsPDF } from "jspdf";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
+
 
 export default function Procuracao() {
   const [formData, setFormData] = useState({
@@ -254,7 +252,6 @@ export default function Procuracao() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header />
       
       <div className="flex-grow py-12 px-4">
         <div className="max-w-4xl mx-auto">
@@ -567,8 +564,6 @@ export default function Procuracao() {
         </DialogContent>
       </Dialog>
 
-      <Footer />
-      <WhatsAppButton />
     </div>
   );
 }
