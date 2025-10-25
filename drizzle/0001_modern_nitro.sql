@@ -1,0 +1,23 @@
+CREATE TABLE `procuracoes` (
+	`id` varchar(64) NOT NULL,
+	`nomeCompleto` text NOT NULL,
+	`nacionalidade` varchar(100) NOT NULL,
+	`estadoCivil` varchar(50) NOT NULL,
+	`profissao` varchar(100) NOT NULL,
+	`rg` varchar(50) NOT NULL,
+	`cpf` varchar(14) NOT NULL,
+	`endereco` text NOT NULL,
+	`numero` varchar(20) NOT NULL,
+	`complemento` varchar(100),
+	`bairro` varchar(100) NOT NULL,
+	`cep` varchar(9) NOT NULL,
+	`cidade` varchar(100) NOT NULL,
+	`estado` varchar(2) NOT NULL,
+	`email` varchar(320) NOT NULL,
+	`assinatura` text NOT NULL,
+	`fotoAutenticacao` text,
+	`dataEmissao` timestamp NOT NULL DEFAULT (now()),
+	`qrCode` text,
+	`createdAt` timestamp DEFAULT (now()),
+	CONSTRAINT `procuracoes_id` PRIMARY KEY(`id`)
+);

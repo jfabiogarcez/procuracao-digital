@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `pagamentos` (\n  `id` varchar(64) NOT NULL PRIMARY KEY,\n  `honorarioId` varchar(64) NOT NULL,\n  `clienteId` varchar(64) NOT NULL,\n  `valor` decimal(10,2) NOT NULL,\n  `dataPagamento` varchar(10) NOT NULL,\n  `metodoPagamento` enum('dinheiro','pix','transferencia','cartao_credito','cartao_debito','boleto','cheque') NOT NULL,\n  `comprovante` text,\n  `observacoes` text,\n  `createdBy` varchar(64),\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP\n)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2f4rVt6W4F2723W.657e6d353426 --database YeYrpCe9amghiTQbjJf2CU --execute CREATE TABLE IF NOT EXISTS `pagamentos` (\n  `id` varchar(64) NOT NULL PRIMARY KEY,\n  `honorarioId` varchar(64) NOT NULL,\n  `clienteId` varchar(64) NOT NULL,\n  `valor` decimal(10,2) NOT NULL,\n  `dataPagamento` varchar(10) NOT NULL,\n  `metodoPagamento` enum('dinheiro','pix','transferencia','cartao_credito','cartao_debito','boleto','cheque') NOT NULL,\n  `comprovante` text,\n  `observacoes` text,\n  `createdBy` varchar(64),\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP\n)",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 352
+}

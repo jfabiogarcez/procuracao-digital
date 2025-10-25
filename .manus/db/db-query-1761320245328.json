@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `pecasProcessuais` (\n  `id` varchar(64) NOT NULL,\n  `titulo` text NOT NULL,\n  `tipo` enum('peticao_inicial','contestacao','recurso','peticao_intermediaria','memoriais','agravo','apelacao','embargos','outro') NOT NULL,\n  `conteudo` text NOT NULL,\n  `processoId` varchar(64),\n  `clienteId` varchar(64),\n  `numeroProcesso` varchar(100),\n  `status` enum('rascunho','revisao','finalizado','enviado') NOT NULL DEFAULT 'rascunho',\n  `versao` varchar(10) DEFAULT '1',\n  `geradoPorIA` enum('sim','nao') DEFAULT 'nao',\n  `promptIA` text,\n  `jurisprudencias` text,\n  `tags` text,\n  `createdBy` varchar(64) NOT NULL,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  `updatedAt` timestamp DEFAULT (now()),\n  CONSTRAINT `pecasProcessuais_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2f4rVt6W4F2723W.657e6d353426 --database YeYrpCe9amghiTQbjJf2CU --execute CREATE TABLE IF NOT EXISTS `pecasProcessuais` (\n  `id` varchar(64) NOT NULL,\n  `titulo` text NOT NULL,\n  `tipo` enum('peticao_inicial','contestacao','recurso','peticao_intermediaria','memoriais','agravo','apelacao','embargos','outro') NOT NULL,\n  `conteudo` text NOT NULL,\n  `processoId` varchar(64),\n  `clienteId` varchar(64),\n  `numeroProcesso` varchar(100),\n  `status` enum('rascunho','revisao','finalizado','enviado') NOT NULL DEFAULT 'rascunho',\n  `versao` varchar(10) DEFAULT '1',\n  `geradoPorIA` enum('sim','nao') DEFAULT 'nao',\n  `promptIA` text,\n  `jurisprudencias` text,\n  `tags` text,\n  `createdBy` varchar(64) NOT NULL,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  `updatedAt` timestamp DEFAULT (now()),\n  CONSTRAINT `pecasProcessuais_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 351
+}

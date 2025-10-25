@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `clientes` (\n  `id` varchar(64) NOT NULL PRIMARY KEY,\n  `nomeCompleto` text NOT NULL,\n  `cpf` varchar(14) NOT NULL UNIQUE,\n  `rg` varchar(50),\n  `email` varchar(320),\n  `telefone` varchar(20),\n  `celular` varchar(20),\n  `logradouro` varchar(255),\n  `numero` varchar(20),\n  `complemento` varchar(100),\n  `bairro` varchar(100),\n  `cep` varchar(9),\n  `cidade` varchar(100),\n  `estado` varchar(2),\n  `dataNascimento` varchar(10),\n  `profissao` varchar(100),\n  `estadoCivil` varchar(50),\n  `nacionalidade` varchar(100),\n  `observacoes` text,\n  `status` enum('ativo','inativo','arquivado') NOT NULL DEFAULT 'ativo',\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updatedAt` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP\n)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2f4rVt6W4F2723W.657e6d353426 --database YeYrpCe9amghiTQbjJf2CU --execute CREATE TABLE IF NOT EXISTS `clientes` (\n  `id` varchar(64) NOT NULL PRIMARY KEY,\n  `nomeCompleto` text NOT NULL,\n  `cpf` varchar(14) NOT NULL UNIQUE,\n  `rg` varchar(50),\n  `email` varchar(320),\n  `telefone` varchar(20),\n  `celular` varchar(20),\n  `logradouro` varchar(255),\n  `numero` varchar(20),\n  `complemento` varchar(100),\n  `bairro` varchar(100),\n  `cep` varchar(9),\n  `cidade` varchar(100),\n  `estado` varchar(2),\n  `dataNascimento` varchar(10),\n  `profissao` varchar(100),\n  `estadoCivil` varchar(50),\n  `nacionalidade` varchar(100),\n  `observacoes` text,\n  `status` enum('ativo','inativo','arquivado') NOT NULL DEFAULT 'ativo',\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updatedAt` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP\n)",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 445
+}

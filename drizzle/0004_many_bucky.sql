@@ -1,0 +1,61 @@
+CREATE TABLE `atividadesLog` (
+	`id` varchar(64) NOT NULL,
+	`userId` varchar(64) NOT NULL,
+	`acao` varchar(100) NOT NULL,
+	`entidade` varchar(50) NOT NULL,
+	`entidadeId` varchar(64),
+	`descricao` text,
+	`ipAddress` varchar(45),
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `atividadesLog_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `clientes` (
+	`id` varchar(64) NOT NULL,
+	`nomeCompleto` text NOT NULL,
+	`cpf` varchar(14) NOT NULL,
+	`rg` varchar(50),
+	`email` varchar(320),
+	`telefone` varchar(20),
+	`celular` varchar(20),
+	`logradouro` varchar(255),
+	`numero` varchar(20),
+	`complemento` varchar(100),
+	`bairro` varchar(100),
+	`cep` varchar(9),
+	`cidade` varchar(100),
+	`estado` varchar(2),
+	`dataNascimento` varchar(10),
+	`profissao` varchar(100),
+	`estadoCivil` varchar(50),
+	`nacionalidade` varchar(100),
+	`observacoes` text,
+	`status` enum('ativo','inativo','arquivado') NOT NULL DEFAULT 'ativo',
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp DEFAULT (now()),
+	CONSTRAINT `clientes_id` PRIMARY KEY(`id`),
+	CONSTRAINT `clientes_cpf_unique` UNIQUE(`cpf`)
+);
+--> statement-breakpoint
+CREATE TABLE `processos` (
+	`id` varchar(64) NOT NULL,
+	`numeroProcesso` varchar(100) NOT NULL,
+	`clienteId` varchar(64) NOT NULL,
+	`tipo` varchar(100) NOT NULL,
+	`area` varchar(100) NOT NULL,
+	`objeto` text NOT NULL,
+	`valor` varchar(50),
+	`status` enum('em_andamento','suspenso','arquivado','finalizado') NOT NULL DEFAULT 'em_andamento',
+	`dataDistribuicao` varchar(10),
+	`dataUltimaMovimentacao` varchar(10),
+	`proximoPrazo` varchar(10),
+	`comarca` varchar(100),
+	`vara` varchar(100),
+	`juiz` varchar(255),
+	`observacoes` text,
+	`createdBy` varchar(64),
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp DEFAULT (now()),
+	CONSTRAINT `processos_id` PRIMARY KEY(`id`),
+	CONSTRAINT `processos_numeroProcesso_unique` UNIQUE(`numeroProcesso`)
+);
