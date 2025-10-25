@@ -1,19 +1,28 @@
 {
-  "buildCommand": "pnpm run build",
-  "outputDirectory": "dist/public",
-  "rewrites": [
-    {
-      "source": "/assets/(.*)",
-      "destination": "/assets/$1"
-    },
-    {
-      "source": "/logo-jfg.png",
-      "destination": "/logo-jfg.png"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
+  "buildCommand": "pnpm build",
+  "devCommand": "pnpm dev",
+  "installCommand": "pnpm install",
+  "framework": "vite",
+  "outputDirectory": "dist",
+  "env": {
+    "NODE_ENV": "production",
+    "VITE_APP_ID": "procuracao-digital",
+    "VITE_APP_TITLE": "JFG Advocacia - Procuração Digital",
+    "JWT_SECRET": "@jfg-procuracao-2025-secret-key",
+    "OAUTH_SERVER_URL": "https://vida.butterfly-effect.dev",
+    "VITE_OAUTH_PORTAL_URL": "https://vida.butterfly-effect.dev"
+  },
+  "env_production": {
+    "OPENAI_API_KEY": "@openai_api_key",
+    "OPENAI_BASE_URL": "https://api.manus.im/api/llm-proxy/v1",
+    "BUILT_IN_FORGE_API_KEY": "@openai_api_key",
+    "BUILT_IN_FORGE_API_URL": "https://api.manus.im/api/llm-proxy"
+  },
+  "regions": ["sfo1"],
+  "functions": {
+    "server/_core/index.ts": {
+      "memory": 3008,
+      "maxDuration": 60
     }
-  ]
+  }
 }
-
