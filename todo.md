@@ -9,5 +9,5 @@
 ## Bugs
 
 - [x] Logo não está aparecendo no site após deploy - investigar referências no código
-- [ ] Configurar VITE_APP_LOGO e fazer novo deploy
+- [x] Configurar VITE_APP_LOGO e fazer novo deploy
 
