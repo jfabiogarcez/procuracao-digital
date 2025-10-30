@@ -11,3 +11,7 @@
 - [x] Logo não está aparecendo no site após deploy - investigar referências no código
 - [x] Configurar VITE_APP_LOGO e fazer novo deploy
 
+
+
+- [ ] Corrigir erro de deploy no Vercel - forçar uso de pnpm ao invés de npm
+
