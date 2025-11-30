@@ -194,12 +194,10 @@ export default function Contact() {
                     <Mail className="h-6 w-6 text-amber-500 flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-semibold text-blue-900 mb-1">E-mail</h3>
-                      <a
-                        href="mailto:jose.fabio.garcez@jfg.adv.br"
-                        className="text-gray-700 hover:text-amber-500 transition-colors break-all"
-                      >
-                        jose.fabio.garcez@jfg.adv.br
-                      </a>
+                      <div className="space-y-1">
+                        <a href="mailto:jose.fabio.garcez@jfg.adv.br" className="text-gray-700 hover:text-amber-500 transition-colors break-all block">jose.fabio.garcez@jfg.adv.br</a>
+                        <a href="mailto:jose.fabio.garcez@adv.oabsp.org.br" className="text-gray-700 hover:text-amber-500 transition-colors break-all block">jose.fabio.garcez@adv.oabsp.org.br</a>
+                      </div>
                     </div>
                   </div>
 
@@ -211,6 +209,16 @@ export default function Contact() {
                         Segunda a Sexta: 9h00 as 18h00<br />
                         Sabado: Mediante agendamento<br />
                         Domingo: Fechado
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <Mail className="h-6 w-6 text-amber-500 flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-blue-900 mb-1">Dados Corporativos</h3>
+                      <p className="text-gray-700">
+                        CNPJ: 63.795.411/0001-30
                       </p>
                     </div>
                   </div>
