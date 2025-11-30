@@ -6,12 +6,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import HomeLanding from "./pages/HomeLanding";
 import Procuracao from "./pages/Procuracao";
-import AdminLogin from "./pages/admin/Login";
-import AdminDashboard from "./pages/admin/Dashboard";
-import NovoDocumento from "./pages/admin/NovoDocumento";
-import FormularioProcuracao from "./pages/admin/FormularioProcuracao";
-import FormularioContrato from "./pages/admin/FormularioContrato";
-import ListaDocumentos from "./pages/admin/ListaDocumentos";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -19,12 +13,6 @@ function Router() {
     <Switch>
       <Route path={"/"} component={HomeLanding} />
       <Route path={"/procuracao"} component={Procuracao} />
-      <Route path={"/admin/login"} component={AdminLogin} />
-      <Route path={"/admin"} component={AdminDashboard} />
-      <Route path={"/admin/documentos/novo"} component={NovoDocumento} />
-      <Route path={"/admin/documentos/procuracao"} component={FormularioProcuracao} />
-      <Route path={"/admin/documentos/contrato"} component={FormularioContrato} />
-      <Route path={"/admin/documentos"} component={ListaDocumentos} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

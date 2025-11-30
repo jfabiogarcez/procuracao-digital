@@ -74,22 +74,14 @@ export default function Footer() {
                   (11) 94721-9180
                 </a>
               </li>
-              <li className="flex items-start space-x-2">
-                <Mail className="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" />
-                <div className="flex flex-col space-y-1">
-                  <a 
-                    href="mailto:jose.fabio.garcez@jfg.adv.br" 
-                    className="text-blue-200 hover:text-amber-400 transition-colors text-sm"
-                  >
-                    jose.fabio.garcez@jfg.adv.br
-                  </a>
-                  <a 
-                    href="mailto:jose.fabio.garcez@adv.oabsp.org.br" 
-                    className="text-blue-200 hover:text-amber-400 transition-colors text-sm"
-                  >
-                    jose.fabio.garcez@adv.oabsp.org.br
-                  </a>
-                </div>
+              <li className="flex items-center space-x-2">
+                <Mail className="h-5 w-5 text-amber-400" />
+                <a 
+                  href="mailto:jose.fabio.garcez@jfg.adv.br" 
+                  className="text-blue-200 hover:text-amber-400 transition-colors text-sm"
+                >
+                  jose.fabio.garcez@jfg.adv.br
+                </a>
               </li>
             </ul>
           </div>
@@ -101,10 +93,9 @@ export default function Footer() {
             <p className="text-blue-200 text-sm">
               © {currentYear} JFG Advocacia. Todos os direitos reservados.
             </p>
-            <div className="text-blue-200 text-sm text-center md:text-right">
-              <p>Dr. Jose Fabio Garcez - OAB/SP 504.270</p>
-              <p>CNPJ: 63.795.411/0001-30</p>
-            </div>
+            <p className="text-blue-200 text-sm">
+              Dr. Jose Fabio Garcez - OAB/SP 504.270
+            </p>
           </div>
         </div>
       </div>
