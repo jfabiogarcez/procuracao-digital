@@ -310,7 +310,8 @@ export default function HomeLanding() {
                     <div>
                       <h3 className="font-semibold mb-2">E-mail</h3>
                       <p className="text-muted-foreground">
-                        contato@jfg.adv.br
+                        contato@jfg.adv.br<br />
+                        jose.fabio.garcez@adv.oabsp.org.br
                       </p>
                     </div>
                   </div>
@@ -325,6 +326,20 @@ export default function HomeLanding() {
                       <p className="text-muted-foreground">
                         Segunda a Sexta: 9h às 18h<br />
                         Sábado: 9h às 13h
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <FileText className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-semibold mb-2">Dados Corporativos</h3>
+                      <p className="text-muted-foreground">
+                        CNPJ: 63.795.411/0001-30<br />
+                        OAB/SP: 504.270
                       </p>
                     </div>
                   </div>
