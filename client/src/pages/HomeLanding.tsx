@@ -37,7 +37,6 @@ export default function HomeLanding() {
           <div className="hidden md:flex items-center gap-8">
             <a href="#sobre" className="text-sm font-medium hover:text-primary transition-colors">Sobre</a>
             <a href="#areas" className="text-sm font-medium hover:text-primary transition-colors">Áreas de Atuação</a>
-            <a href="#equipe" className="text-sm font-medium hover:text-primary transition-colors">Equipe</a>
             <a href="#contato" className="text-sm font-medium hover:text-primary transition-colors">Contato</a>
           </div>
           <Button asChild>
@@ -171,32 +170,6 @@ export default function HomeLanding() {
                 </CardContent>
               </Card>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Equipe Section */}
-      <section id="equipe" className="py-20 bg-muted/30">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Nossa Equipe</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Profissionais altamente qualificados e comprometidos com a excelência 
-              no atendimento e na defesa dos seus interesses.
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Card className="max-w-md w-full">
-              <CardContent className="p-8 text-center">
-                <div className="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden">
-                  <img src="/images/foto-jfg.jpg" alt="Dr. José Fabio Garcez" className="w-full h-full object-cover" />
-                </div>
-                <h3 className="text-2xl font-semibold mb-2">Dr. José Fabio Garcez</h3>
-                <p className="text-primary font-medium mb-3 text-lg">Sócio Fundador</p>
-                <p className="text-sm text-muted-foreground mb-2">Direito do Trabalho e Direito Empresarial</p>
-                <p className="text-xs text-muted-foreground">OAB/SP 504.270</p>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
@@ -367,7 +340,6 @@ export default function HomeLanding() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><a href="#sobre" className="hover:text-primary transition-colors">Sobre</a></li>
                 <li><a href="#areas" className="hover:text-primary transition-colors">Áreas de Atuação</a></li>
-                <li><a href="#equipe" className="hover:text-primary transition-colors">Equipe</a></li>
                 <li><a href="#contato" className="hover:text-primary transition-colors">Contato</a></li>
               </ul>
             </div>
@@ -389,4 +361,3 @@ export default function HomeLanding() {
     </div>
   );
 }
-
