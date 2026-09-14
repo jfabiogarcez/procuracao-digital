@@ -116,7 +116,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.send(pdfBuffer);
   } catch (error) {
     console.error('Erro ao gerar PDF:', error);
-    res.status(500).json({ error: 'Erro ao gerar PDF', details: error.message });
+    const details = error instanceof Error ? error.message : String(error);
+    res.status(500).json({ error: 'Erro ao gerar PDF', details });
   }
 }
-
