@@ -233,7 +233,7 @@ export default function HomeLanding() {
         <nav className="container flex h-[76px] items-center justify-between gap-3">
           <a href="#inicio" className="flex min-w-0 items-center gap-3" aria-label="JFG Advocacia">
             <span className="logo-plaque logo-plaque-header">
-              <img src="/images/logo-jfg-transparent.png" alt="JFG" className="h-full w-full object-contain" />
+              <img src="/images/logo-jfg-white.png" alt="JFG" className="h-full w-full object-contain" />
             </span>
             <div className="hidden min-w-0 border-l border-white/20 pl-3 sm:block">
               <p className="font-display text-base leading-none tracking-wide">JFG Advocacia</p>
@@ -546,7 +546,7 @@ export default function HomeLanding() {
           <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr_1fr]">
             <div>
               <span className="logo-plaque logo-plaque-footer">
-                <img src="/images/logo-jfg-transparent.png" alt="JFG" className="h-full w-full object-contain" />
+                <img src="/images/logo-jfg-white.png" alt="JFG" className="h-full w-full object-contain" />
               </span>
               <p className="mt-4 max-w-sm text-sm leading-6 text-white/48">{t.footer.description}</p>
               <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35">{t.footer.followUs}</p>
