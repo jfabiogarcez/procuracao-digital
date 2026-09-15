@@ -1,7 +1,6 @@
 {
   "buildCommand": "pnpm run build",
   "outputDirectory": "dist/public",
-  "alias": ["www.jfg.adv.br"],
   "rewrites": [
     {
       "source": "/assets/(.*)",
