@@ -504,7 +504,10 @@ export default function HomeLanding() {
                     <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#d2b77f]" />
                     <div>
                       <h3 className="contact-heading">{t.contact.address}</h3>
-                      <div className="mt-1 text-sm leading-6 text-white/78">Rua Capitão Antonio Rosa, 409<br />São Paulo — SP</div>
+                      <div className="mt-1 text-sm leading-6 text-white/78">
+                        R. Cap. Antônio Rosa, 409 - Pinheiros,<br />
+                        São Paulo - SP, CEP 01443-010.
+                      </div>
                     </div>
                   </div>
                   <div className="flex gap-4">
@@ -574,7 +577,7 @@ export default function HomeLanding() {
               <div className="mt-5 space-y-2 text-sm leading-6 text-white/55">
                 <p>CNPJ: 63.795.411/0001-30</p>
                 <p>OAB/SP: 504.270</p>
-                <p>Rua Capitão Antonio Rosa, 409 — São Paulo/SP</p>
+                <p>R. Cap. Antônio Rosa, 409 - Pinheiros, São Paulo - SP, CEP 01443-010.</p>
               </div>
             </div>
           </div>
