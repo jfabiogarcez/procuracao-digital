@@ -361,6 +361,28 @@
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.45);
   }
+
+  .social-link {
+    display: inline-flex;
+    width: 2.55rem;
+    height: 2.55rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.62);
+    transition:
+      border-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+      background-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+      color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+      transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .social-link:hover {
+    border-color: rgba(180, 147, 93, 0.72);
+    background: rgba(180, 147, 93, 0.12);
+    color: #d2b77f;
+    transform: translateY(-2px);
+  }
 }
 
 .paper-texture,

@@ -12,6 +12,7 @@ import {
   HeartHandshake,
   Home,
   Landmark,
+  Linkedin,
   Mail,
   MapPin,
   Menu,
@@ -548,6 +549,19 @@ export default function HomeLanding() {
                 <img src="/images/logo-jfg-transparent.png" alt="JFG" className="h-full w-full object-contain" />
               </span>
               <p className="mt-4 max-w-sm text-sm leading-6 text-white/48">{t.footer.description}</p>
+              <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35">{t.footer.followUs}</p>
+              <div className="mt-3 flex items-center gap-2">
+                <a
+                  href="https://br.linkedin.com/company/jfg-advocacia-consultoria-jur%C3%ADdica"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="social-link"
+                  aria-label="LinkedIn"
+                  title="LinkedIn"
+                >
+                  <Linkedin className="h-4.5 w-4.5" />
+                </a>
+              </div>
             </div>
             <div>
               <h3 className="footer-heading">{t.footer.quickLinks}</h3>

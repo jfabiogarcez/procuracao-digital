@@ -102,6 +102,7 @@ export const translations = {
     },
     footer: {
       description: "Atendimento jurídico responsável, estratégico e próximo para pessoas e empresas.",
+      followUs: "Acompanhe a JFG",
       quickLinks: "Links rápidos",
       officeData: "Dados do escritório",
       rights: "Todos os direitos reservados.",
@@ -198,6 +199,7 @@ export const translations = {
     },
     footer: {
       description: "Responsible, strategic and attentive legal counsel for individuals and businesses.",
+      followUs: "Follow JFG",
       quickLinks: "Quick links",
       officeData: "Firm information",
       rights: "All rights reserved.",
@@ -294,6 +296,7 @@ export const translations = {
     },
     footer: {
       description: "Atención jurídica responsable, estratégica y cercana para personas y empresas.",
+      followUs: "Siga a JFG",
       quickLinks: "Enlaces rápidos",
       officeData: "Datos del despacho",
       rights: "Todos los derechos reservados.",
