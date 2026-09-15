@@ -170,10 +170,8 @@ export default function About() {
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-blue-900 mb-4">Endereco</h3>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  Rua Capitao Antonio Rosa, n 409, 1 Andar<br />
-                  Edificio Spaces<br />
-                  Jardim Paulistano<br />
-                  Sao Paulo/SP - CEP 01443-010
+                  R. Cap. Antônio Rosa, 409 - Pinheiros<br />
+                  São Paulo - SP, CEP 01443-010.
                 </p>
               </div>
               <div className="text-center">
@@ -195,4 +193,3 @@ export default function About() {
     </div>
   );
 }
-

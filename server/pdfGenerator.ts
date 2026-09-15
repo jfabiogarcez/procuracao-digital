@@ -78,7 +78,7 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
   yPosition -= 5;
   
   addParagraph(
-    "Dr. JOSÉ FÁBIO GARCEZ, brasileiro, casado, inscrito na Ordem dos Advogados do Brasil, Seccional de São Paulo (OAB/SP) sob o n 504.270, com escritório profissional situado a Rua Capitão Antonio Rosa, n 409, 1 Andar, Edifício Spaces, Jardim Paulistano, São Paulo/SP, CEP 01443-010, endereço eletrônico: jose.fabio.garcez@gmail.com, telefone: (11) 94721-9180.",
+    "Dr. JOSÉ FÁBIO GARCEZ, brasileiro, casado, inscrito na Ordem dos Advogados do Brasil, Seccional de São Paulo (OAB/SP) sob o n 504.270, com escritório profissional situado à R. Cap. Antônio Rosa, 409 - Pinheiros, São Paulo - SP, CEP 01443-010, endereço eletrônico: jose.fabio.garcez@gmail.com, telefone: (11) 94721-9180.",
     10
   );
   yPosition -= 10;
@@ -241,11 +241,10 @@ export async function generateProcuracaoPDF(procuracao: Procuracao): Promise<Buf
 
   // Rodapé
   yPosition = 50;
-  addText("Rua Capitão Antonio Rosa, 409, 1 Andar, Edifício Spaces, Jardim Paulistano, São Paulo/SP, CEP 01443-010", 8, false, "center");
+  addText("R. Cap. Antônio Rosa, 409 - Pinheiros, São Paulo - SP, CEP 01443-010.", 8, false, "center");
   addText("WhatsApp: (11) 9 4721-9180 / Tel. (11) 94721-9180", 8, false, "center");
   addText("E-mail: contato@jfg.adv.br", 8, false, "center");
 
   const pdfBytes = await pdfDoc.save();
   return Buffer.from(pdfBytes);
 }
-

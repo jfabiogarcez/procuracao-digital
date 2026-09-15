@@ -169,10 +169,8 @@ export default function Contact() {
                     <div>
                       <h3 className="font-semibold text-blue-900 mb-1">Endereco</h3>
                       <p className="text-gray-700">
-                        Rua Capitao Antonio Rosa, n 409, 1 Andar<br />
-                        Edificio Spaces<br />
-                        Jardim Paulistano<br />
-                        Sao Paulo/SP - CEP 01443-010
+                        R. Cap. Antônio Rosa, 409 - Pinheiros<br />
+                        São Paulo - SP, CEP 01443-010.
                       </p>
                     </div>
                   </div>
@@ -267,7 +265,7 @@ export default function Contact() {
           <div className="text-center">
             <MapPin className="h-16 w-16 text-gray-500 mx-auto mb-4" />
             <p className="text-gray-600 font-semibold">Mapa de Localizacao</p>
-            <p className="text-gray-500 text-sm">Jardim Paulistano, Sao Paulo/SP</p>
+            <p className="text-gray-500 text-sm">Pinheiros, São Paulo/SP</p>
           </div>
         </div>
       </section>
@@ -277,4 +275,3 @@ export default function Contact() {
     </div>
   );
 }
-

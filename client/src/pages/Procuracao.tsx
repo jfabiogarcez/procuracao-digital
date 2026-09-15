@@ -160,9 +160,9 @@ export default function Procuracao() {
       yPos += 7;
       doc.text("OAB/SP: 504.270", margin, yPos);
       yPos += 7;
-      doc.text("Endereco: Rua Capitao Antonio Rosa, n 409, 1 Andar, Edificio Spaces", margin, yPos);
+      doc.text("Endereco: R. Cap. Antonio Rosa, 409 - Pinheiros", margin, yPos);
       yPos += 7;
-      doc.text("Jardim Paulistano, Sao Paulo/SP, CEP 01443-010", margin, yPos);
+      doc.text("Sao Paulo - SP, CEP 01443-010.", margin, yPos);
       yPos += 7;
       doc.text("E-mail: jose.fabio.garcez@jfg.adv.br", margin, yPos);
       yPos += 7;
@@ -567,4 +567,3 @@ export default function Procuracao() {
     </div>
   );
 }
-

@@ -47,8 +47,8 @@ export async function sendProcuracaoEmail(params: {
         
         <p style="font-size: 12px; color: #666;">
           <strong>JFG Advocacia</strong><br>
-          Rua Capitao Antonio Rosa, 409, 1 Andar, Edificio Spaces<br>
-          Jardim Paulistano, Sao Paulo/SP, CEP 01443-010<br>
+          R. Cap. Antônio Rosa, 409 - Pinheiros<br>
+          São Paulo - SP, CEP 01443-010.<br>
           WhatsApp: (11) 9 4721-9180<br>
           E-mail: jose.fabio.garcez@gmail.com
         </p>
@@ -65,4 +65,3 @@ export async function sendProcuracaoEmail(params: {
     return { success: false, error: String(error) };
   }
 }
-

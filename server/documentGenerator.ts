@@ -85,7 +85,7 @@ export async function generateProcuracaoDocument(procuracao: Procuracao): Promis
                 alignment: AlignmentType.CENTER,
                 children: [
                   new TextRun({
-                    text: "Rua Capitão Antônio Rosa, 409, 1º Andar, Edifício Spaces, Jardim Paulistano, São Paulo/SP, CEP 01443-010",
+                    text: "R. Cap. Antônio Rosa, 409 - Pinheiros, São Paulo - SP, CEP 01443-010.",
                     size: 18,
                   }),
                 ],
@@ -166,7 +166,7 @@ export async function generateProcuracaoDocument(procuracao: Procuracao): Promis
                 bold: true,
               }),
               new TextRun({
-                text: ", brasileiro, casado, inscrito na Ordem dos Advogados do Brasil, Seccional de São Paulo (OAB/SP) sob o nº 504.270, com escritório profissional situado à Rua Capitão Antônio Rosa, nº 409, 1º Andar, Edifício Spaces, Jardim Paulistano, São Paulo/SP, CEP 01443-010, endereço eletrônico: jose.fabio.garcez@gmail.com, telefone: (11) 94721-9180.",
+                text: ", brasileiro, casado, inscrito na Ordem dos Advogados do Brasil, Seccional de São Paulo (OAB/SP) sob o nº 504.270, com escritório profissional situado à R. Cap. Antônio Rosa, 409 - Pinheiros, São Paulo - SP, CEP 01443-010, endereço eletrônico: jose.fabio.garcez@gmail.com, telefone: (11) 94721-9180.",
               }),
             ],
             spacing: { after: 400 },
@@ -308,4 +308,3 @@ export async function generateProcuracaoDocument(procuracao: Procuracao): Promis
 
   return await Packer.toBuffer(doc);
 }
-

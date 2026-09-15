@@ -60,9 +60,8 @@ export default function Footer() {
               <li className="flex items-start space-x-2">
                 <MapPin className="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" />
                 <span className="text-blue-200 text-sm">
-                  Rua Capitao Antonio Rosa, n 409, 1 Andar<br />
-                  Edificio Spaces, Jardim Paulistano<br />
-                  Sao Paulo/SP - CEP 01443-010
+                  R. Cap. Antônio Rosa, 409 - Pinheiros<br />
+                  São Paulo - SP, CEP 01443-010.
                 </span>
               </li>
               <li className="flex items-center space-x-2">
@@ -101,4 +100,3 @@ export default function Footer() {
     </footer>
   );
 }
-

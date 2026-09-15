@@ -165,9 +165,9 @@ export default function Home() {
       yPos += 7;
       doc.text("OAB/SP: 504.270", margin, yPos);
       yPos += 7;
-      doc.text("Endereço: Rua Capitao Antonio Rosa, n 409, 1 Andar, Edificio Spaces", margin, yPos);
+      doc.text("Endereço: R. Cap. Antonio Rosa, 409 - Pinheiros", margin, yPos);
       yPos += 7;
-      doc.text("Jardim Paulistano, Sao Paulo/SP, CEP 01443-010", margin, yPos);
+      doc.text("Sao Paulo - SP, CEP 01443-010.", margin, yPos);
       yPos += 7;
       doc.text("E-mail: jose.fabio.garcez@gmail.com", margin, yPos);
       yPos += 7;
@@ -545,7 +545,7 @@ export default function Home() {
                 <div className="space-y-2">
                   <p><strong>Nome:</strong> Dr. Jose Fabio Garcez</p>
                   <p><strong>OAB/SP:</strong> 504.270</p>
-                  <p><strong>Endereco:</strong> Rua Capitao Antonio Rosa, n 409, 1 Andar, Edificio Spaces, Jardim Paulistano, Sao Paulo/SP, CEP 01443-010</p>
+                  <p><strong>Endereco:</strong> R. Cap. Antônio Rosa, 409 - Pinheiros, São Paulo - SP, CEP 01443-010.</p>
                   <p><strong>E-mail:</strong> jose.fabio.garcez@gmail.com</p>
                   <p><strong>Telefone:</strong> (11) 94721-9180</p>
                 </div>
@@ -629,4 +629,3 @@ export default function Home() {
     </div>
   );
 }
-

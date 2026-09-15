@@ -50,7 +50,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     doc.moveDown(0.5);
     doc.fontSize(10).font('Helvetica').text(`Nome: Dr. Jose Fabio Garcez`);
     doc.text(`OAB/SP: 504.270`);
-    doc.text(`Endereço: Rua Capitao Antonio Rosa, n 409, 1 Andar, Edificio Spaces, Jardim Paulistano, Sao Paulo/SP, CEP 01443-010`);
+    doc.text(`Endereço: R. Cap. Antônio Rosa, 409 - Pinheiros, São Paulo - SP, CEP 01443-010.`);
     doc.text(`E-mail: jose.fabio.garcez@gmail.com`);
     doc.text(`Telefone: (11) 94721-9180`);
     doc.moveDown(1.5);
