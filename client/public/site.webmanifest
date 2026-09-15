@@ -1,0 +1,22 @@
+{
+  "name": "JFG Advocacia",
+  "short_name": "JFG",
+  "description": "JFG Advocacia e Consultoria Jurídica em São Paulo.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07101e",
+  "theme_color": "#07101e",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

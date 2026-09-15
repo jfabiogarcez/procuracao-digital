@@ -14,8 +14,8 @@ export const languageOptions: Array<{
 export const translations = {
   pt: {
     locale: "pt-BR",
-    pageTitle: "JFG Advocacia | Consultoria Jurídica",
-    pageDescription: "JFG Advocacia e Consultoria Jurídica em São Paulo. Atendimento estratégico, responsável e personalizado.",
+    pageTitle: "JFG Advocacia | Escritório de Advocacia em São Paulo",
+    pageDescription: "JFG Advocacia em Pinheiros, São Paulo. Assessoria em Direito Civil, Empresarial, Trabalhista, Tributário, de Família e Imobiliário. Telefone: (11) 2133-2188.",
     languageSelector: "Selecionar idioma",
     brandSubtitle: "Consultoria Jurídica",
     nav: {
@@ -90,6 +90,7 @@ export const translations = {
       messagePlaceholder: "Descreva brevemente sua necessidade...",
       submit: "Enviar pelo WhatsApp",
       address: "Endereço",
+      viewMap: "Ver no Google Maps",
       phones: "Telefones",
       service: "Atendimento",
       weekdays: "Segunda a sexta, das 9h às 18h",
@@ -111,8 +112,8 @@ export const translations = {
   },
   en: {
     locale: "en-US",
-    pageTitle: "JFG Law Firm | Legal Consulting",
-    pageDescription: "JFG Law Firm and Legal Consulting in São Paulo. Strategic, responsible and personalized legal counsel.",
+    pageTitle: "JFG Law Firm | Attorneys in São Paulo, Brazil",
+    pageDescription: "JFG Law Firm in Pinheiros, São Paulo. Civil, corporate, labor, tax, family and real estate legal counsel. Phone: +55 11 2133-2188.",
     languageSelector: "Select language",
     brandSubtitle: "Legal Consulting",
     nav: {
@@ -187,6 +188,7 @@ export const translations = {
       messagePlaceholder: "Briefly describe your legal needs...",
       submit: "Send via WhatsApp",
       address: "Address",
+      viewMap: "View on Google Maps",
       phones: "Phone numbers",
       service: "Office hours",
       weekdays: "Monday to Friday, 9:00 a.m. to 6:00 p.m.",
@@ -208,8 +210,8 @@ export const translations = {
   },
   es: {
     locale: "es-ES",
-    pageTitle: "JFG Abogados | Consultoría Jurídica",
-    pageDescription: "JFG Abogados y Consultoría Jurídica en São Paulo. Atención estratégica, responsable y personalizada.",
+    pageTitle: "JFG Abogados | Despacho Jurídico en São Paulo",
+    pageDescription: "JFG Abogados en Pinheiros, São Paulo. Asesoría civil, empresarial, laboral, tributaria, familiar e inmobiliaria. Teléfono: +55 11 2133-2188.",
     languageSelector: "Seleccionar idioma",
     brandSubtitle: "Consultoría Jurídica",
     nav: {
@@ -284,6 +286,7 @@ export const translations = {
       messagePlaceholder: "Describa brevemente su necesidad jurídica...",
       submit: "Enviar por WhatsApp",
       address: "Dirección",
+      viewMap: "Ver en Google Maps",
       phones: "Teléfonos",
       service: "Horario de atención",
       weekdays: "Lunes a viernes, de 9:00 a 18:00",

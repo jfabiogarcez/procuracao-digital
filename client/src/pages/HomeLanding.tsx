@@ -49,6 +49,8 @@ const practiceIcons = [
   Home,
 ];
 
+const officeMapUrl = "https://www.google.com/maps/search/?api=1&query=R.%20Cap.%20Ant%C3%B4nio%20Rosa%2C%20409%20-%20Pinheiros%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001443-010";
+
 function LanguageSelector({
   language,
   onChange,
@@ -508,6 +510,15 @@ export default function HomeLanding() {
                         R. Cap. Antônio Rosa, 409 - Pinheiros,<br />
                         São Paulo - SP, CEP 01443-010.
                       </div>
+                      <a
+                        href={officeMapUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-[#d2b77f] hover:text-white"
+                      >
+                        {t.contact.viewMap}
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </a>
                     </div>
                   </div>
                   <div className="flex gap-4">
@@ -577,7 +588,11 @@ export default function HomeLanding() {
               <div className="mt-5 space-y-2 text-sm leading-6 text-white/55">
                 <p>CNPJ: 63.795.411/0001-30</p>
                 <p>OAB/SP: 504.270</p>
-                <p>R. Cap. Antônio Rosa, 409 - Pinheiros, São Paulo - SP, CEP 01443-010.</p>
+                <p>
+                  <a href={officeMapUrl} target="_blank" rel="noreferrer" className="hover:text-[#d2b77f]">
+                    R. Cap. Antônio Rosa, 409 - Pinheiros, São Paulo - SP, CEP 01443-010.
+                  </a>
+                </p>
               </div>
             </div>
           </div>
