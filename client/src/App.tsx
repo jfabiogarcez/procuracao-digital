@@ -4,15 +4,13 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import HomeLanding from "./pages/HomeLanding";
-import Procuracao from "./pages/Procuracao";
+import HomeHybrid from "./pages/HomeHybrid";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={HomeLanding} />
-      <Route path={"/procuracao"} component={Procuracao} />
+      <Route path={"/"} component={HomeHybrid} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

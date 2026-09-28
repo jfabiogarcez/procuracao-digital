@@ -15,7 +15,7 @@ export const translations = {
   pt: {
     locale: "pt-BR",
     pageTitle: "JFG Advocacia | Escritório de Advocacia em São Paulo",
-    pageDescription: "JFG Advocacia em Pinheiros, São Paulo. Assessoria em Direito Civil, Empresarial, Trabalhista, Tributário, de Família e Imobiliário. Telefone: (11) 2133-2188.",
+    pageDescription: "JFG Advocacia em Pinheiros, São Paulo. Assessoria em Direito Civil, Empresarial, Trabalhista, Tributário, de Família e Imobiliário. Telefone: (11) 2888-2133.",
     languageSelector: "Selecionar idioma",
     brandSubtitle: "Consultoria Jurídica",
     nav: {
@@ -113,7 +113,7 @@ export const translations = {
   en: {
     locale: "en-US",
     pageTitle: "JFG Law Firm | Attorneys in São Paulo, Brazil",
-    pageDescription: "JFG Law Firm in Pinheiros, São Paulo. Civil, corporate, labor, tax, family and real estate legal counsel. Phone: +55 11 2133-2188.",
+    pageDescription: "JFG Law Firm in Pinheiros, São Paulo. Civil, corporate, labor, tax, family and real estate legal counsel. Phone: +55 11 2888-2133.",
     languageSelector: "Select language",
     brandSubtitle: "Legal Consulting",
     nav: {
@@ -211,7 +211,7 @@ export const translations = {
   es: {
     locale: "es-ES",
     pageTitle: "JFG Abogados | Despacho Jurídico en São Paulo",
-    pageDescription: "JFG Abogados en Pinheiros, São Paulo. Asesoría civil, empresarial, laboral, tributaria, familiar e inmobiliaria. Teléfono: +55 11 2133-2188.",
+    pageDescription: "JFG Abogados en Pinheiros, São Paulo. Asesoría civil, empresarial, laboral, tributaria, familiar e inmobiliaria. Teléfono: +55 11 2888-2133.",
     languageSelector: "Seleccionar idioma",
     brandSubtitle: "Consultoría Jurídica",
     nav: {
