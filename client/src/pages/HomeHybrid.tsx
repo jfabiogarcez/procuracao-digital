@@ -383,7 +383,7 @@ export default function HomeHybrid() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#07101e]/92 text-white shadow-[0_12px_40px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#090909]/94 text-white shadow-[0_12px_40px_rgba(0,0,0,0.18)] backdrop-blur-xl">
         <nav className="container flex h-[78px] items-center justify-between gap-3">
           <a href="#inicio" className="flex min-w-0 items-center gap-3" aria-label="JFG Advocacia">
             <span className="logo-plaque logo-plaque-header">
@@ -401,7 +401,7 @@ export default function HomeHybrid() {
 
           <div className="flex shrink-0 items-center gap-2">
             <LanguageSelector language={language} onChange={selectLanguage} label={t.languageSelector} />
-            <Button asChild className="hidden rounded-none bg-[#b4935d] px-4 text-[#07101e] shadow-none hover:bg-[#ccb07d] md:inline-flex">
+            <Button asChild className="hidden rounded-none bg-[#b4935d] px-4 text-black shadow-none hover:bg-[#ccb07d] md:inline-flex">
               <a href="#contato">{t.nav.schedule}</a>
             </Button>
             <button
@@ -417,7 +417,7 @@ export default function HomeHybrid() {
         </nav>
 
         {isMenuOpen && (
-          <div className="border-t border-white/10 bg-[#07101e] xl:hidden">
+          <div className="border-t border-white/10 bg-[#090909] xl:hidden">
             <div className="container grid py-4">
               {navItems.map(([label, href]) => (
                 <a key={href} href={href} onClick={() => setIsMenuOpen(false)} className="border-b border-white/10 py-3 text-sm text-white/80 last:border-0">
@@ -437,10 +437,10 @@ export default function HomeHybrid() {
               <h1 className="hybrid-hero-title">{h.heroTitle}</h1>
               <p className="hybrid-hero-description">{h.heroDescription}</p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" asChild className="group rounded-none bg-[#b4935d] px-7 text-[#07101e] hover:bg-[#ccb07d]">
+                <Button size="lg" asChild className="group rounded-none bg-[#b4935d] px-7 text-black hover:bg-[#ccb07d]">
                   <a href="#contato">{t.hero.primaryCta}<ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" /></a>
                 </Button>
-                <Button size="lg" variant="outline" asChild className="rounded-none border-white/30 bg-transparent px-7 text-white hover:bg-white hover:text-[#07101e]">
+                <Button size="lg" variant="outline" asChild className="rounded-none border-white/30 bg-transparent px-7 text-white hover:bg-white hover:text-black">
                   <a href="#areas">{t.hero.secondaryCta}</a>
                 </Button>
               </div>
@@ -520,7 +520,7 @@ export default function HomeHybrid() {
               <p className="section-kicker">{h.approachKicker}</p>
               <h2 className="hybrid-editorial-title mt-5">{h.approachTitle}</h2>
               <p className="mt-7 max-w-xl text-base leading-7 text-muted-foreground">{h.approachIntro}</p>
-              <Button asChild className="mt-8 rounded-none bg-[#0a1a30] text-white hover:bg-[#152f53]"><a href="#contato">{h.approachCta}<ArrowRight className="ml-2 h-4 w-4" /></a></Button>
+              <Button asChild className="mt-8 rounded-none bg-[#0b0b0b] text-white hover:bg-[#252525]"><a href="#contato">{h.approachCta}<ArrowRight className="ml-2 h-4 w-4" /></a></Button>
             </div>
             <ol className="hybrid-process-list">
               {h.approachSteps.map(([title, description], index) => <li key={title}><span>0{index + 1}</span><div><h3>{title}</h3><p>{description}</p></div></li>)}
@@ -556,16 +556,16 @@ export default function HomeHybrid() {
             <div className="grid gap-4 sm:grid-cols-2" aria-live="polite">
               <article className="hybrid-data-card">
                 <div className="flex items-start justify-between gap-3"><div className="hybrid-data-icon"><TrendingUp className="h-5 w-5" /></div><span className="hybrid-data-source">{t.publicInfo.centralBank}</span></div>
-                <p className="mt-8 text-sm text-[#596575]">{t.publicInfo.selicLabel}</p>
-                <p className="mt-1 font-display text-5xl text-[#0a1a30]">{publicInfo.loading ? "—" : publicInfo.selic ? `${Number(publicInfo.selic).toLocaleString(t.locale)}%` : t.publicInfo.unavailable}</p>
-                <p className="mt-3 min-h-5 text-xs text-[#7a8290]">{publicInfo.selicDate ? `${t.publicInfo.updated} ${formatBcbDate(publicInfo.selicDate)}` : t.publicInfo.selicFallback}</p>
+                <p className="mt-8 text-sm text-[#606060]">{t.publicInfo.selicLabel}</p>
+                <p className="mt-1 font-display text-5xl text-[#0b0b0b]">{publicInfo.loading ? "—" : publicInfo.selic ? `${Number(publicInfo.selic).toLocaleString(t.locale)}%` : t.publicInfo.unavailable}</p>
+                <p className="mt-3 min-h-5 text-xs text-[#858585]">{publicInfo.selicDate ? `${t.publicInfo.updated} ${formatBcbDate(publicInfo.selicDate)}` : t.publicInfo.selicFallback}</p>
                 <a href="https://www.bcb.gov.br/controleinflacao/taxaselic" target="_blank" rel="noreferrer" className="hybrid-source-link">{t.publicInfo.officialSource}<ExternalLink className="h-3.5 w-3.5" /></a>
               </article>
               <article className="hybrid-data-card">
                 <div className="flex items-start justify-between gap-3"><div className="hybrid-data-icon"><CalendarDays className="h-5 w-5" /></div><span className="hybrid-data-source">{t.publicInfo.nationalCalendar}</span></div>
-                <p className="mt-8 text-sm text-[#596575]">{t.publicInfo.nextHoliday}</p>
-                <p className="mt-2 font-display text-3xl leading-tight text-[#0a1a30]">{publicInfo.loading ? t.publicInfo.loading : publicInfo.holidayName ? translateHoliday(publicInfo.holidayName, language) : t.publicInfo.unavailable}</p>
-                <p className="mt-3 min-h-5 text-xs text-[#7a8290]">{publicInfo.holidayDate ? formatApiDate(publicInfo.holidayDate) : t.publicInfo.holidayFallback}</p>
+                <p className="mt-8 text-sm text-[#606060]">{t.publicInfo.nextHoliday}</p>
+                <p className="mt-2 font-display text-3xl leading-tight text-[#0b0b0b]">{publicInfo.loading ? t.publicInfo.loading : publicInfo.holidayName ? translateHoliday(publicInfo.holidayName, language) : t.publicInfo.unavailable}</p>
+                <p className="mt-3 min-h-5 text-xs text-[#858585]">{publicInfo.holidayDate ? formatApiDate(publicInfo.holidayDate) : t.publicInfo.holidayFallback}</p>
                 <a href="https://brasilapi.com.br/docs#tag/Feriados-Nacionais" target="_blank" rel="noreferrer" className="hybrid-source-link">{t.publicInfo.viewSource}<ExternalLink className="h-3.5 w-3.5" /></a>
               </article>
               <p className="text-xs leading-5 text-muted-foreground sm:col-span-2">{t.publicInfo.disclaimer}</p>
@@ -577,7 +577,7 @@ export default function HomeHybrid() {
           <div className="hybrid-contact-band">
             <div className="hybrid-contact-callout">
               <p>{h.contactKicker}</p><h2>{h.contactTitle}</h2>
-              <Button size="lg" asChild className="mt-8 rounded-none border border-[#07101e] bg-[#07101e] px-7 text-white hover:bg-transparent hover:text-[#07101e]"><a href="#preparar-contato">{h.prepareContact}<ArrowDownRight className="ml-2 h-4 w-4" /></a></Button>
+              <Button size="lg" asChild className="mt-8 rounded-none border border-black bg-black px-7 text-white hover:bg-transparent hover:text-black"><a href="#preparar-contato">{h.prepareContact}<ArrowDownRight className="ml-2 h-4 w-4" /></a></Button>
             </div>
             <div className="hybrid-contact-data">
               <div><h3>{t.contact.address}</h3><p>R. Cap. Antônio Rosa, 409 - Pinheiros,<br />São Paulo - SP, CEP 01443-010.</p><a href={officeMapUrl} target="_blank" rel="noreferrer">{t.contact.viewMap}<ExternalLink className="h-3.5 w-3.5" /></a></div>
@@ -590,7 +590,7 @@ export default function HomeHybrid() {
             <div className="container hybrid-contact-form-grid">
               <div>
                 <p className="section-kicker">{t.contact.kicker}</p><h2 className="hybrid-editorial-title mt-5">{t.contact.title}</h2><p className="mt-6 max-w-lg text-base leading-7 text-muted-foreground">{t.contact.intro}</p>
-                <div className="mt-9 space-y-5 text-sm text-[#4e5a68]">
+                <div className="mt-9 space-y-5 text-sm text-[#555555]">
                   <p className="flex items-center gap-3"><Phone className="h-4 w-4 text-[#927447]" />(11) 9 4721-9180</p>
                   <p className="flex items-center gap-3"><Mail className="h-4 w-4 text-[#927447]" />contato@jfg.adv.br</p>
                   <p className="flex items-center gap-3"><Clock className="h-4 w-4 text-[#927447]" />{t.contact.weekdays}</p>
@@ -602,14 +602,14 @@ export default function HomeHybrid() {
                 <div><label htmlFor="phone" className="form-label">{t.contact.phone}</label><input type="tel" id="phone" value={formData.phone} onChange={handleChange} className="form-field" placeholder="(11) 99999-9999" required /></div>
                 <div className="sm:col-span-2"><label htmlFor="email" className="form-label">{t.contact.email}</label><input type="email" id="email" value={formData.email} onChange={handleChange} className="form-field" placeholder={t.contact.emailPlaceholder} required /></div>
                 <div className="sm:col-span-2"><label htmlFor="message" className="form-label">{t.contact.message}</label><textarea id="message" rows={5} value={formData.message} onChange={handleChange} className="form-field resize-none" placeholder={t.contact.messagePlaceholder} required /></div>
-                <div className="sm:col-span-2"><Button type="submit" size="lg" className="group w-full rounded-none bg-[#0a1a30] text-white hover:bg-[#152f53] sm:w-auto">{t.contact.submit}<MessageSquareText className="ml-2 h-4 w-4" /></Button></div>
+                <div className="sm:col-span-2"><Button type="submit" size="lg" className="group w-full rounded-none bg-[#0b0b0b] text-white hover:bg-[#252525] sm:w-auto">{t.contact.submit}<MessageSquareText className="ml-2 h-4 w-4" /></Button></div>
               </form>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-white/10 bg-[#050d19] py-12 text-white">
+      <footer className="border-t border-white/10 bg-[#050505] py-12 text-white">
         <div className="container">
           <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr_1fr]">
             <div><span className="logo-plaque logo-plaque-footer"><img src="/images/logo-jfg-white.png" alt="JFG" className="h-full w-full object-contain" /></span><p className="mt-4 max-w-sm text-sm leading-6 text-white/48">{t.footer.description}</p><p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35">{t.footer.followUs}</p><a href="https://br.linkedin.com/company/jfg-advocacia-consultoria-jur%C3%ADdica" target="_blank" rel="noreferrer" className="social-link mt-3" aria-label="LinkedIn"><Linkedin className="h-4.5 w-4.5" /></a></div>
